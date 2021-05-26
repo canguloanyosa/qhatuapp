@@ -214,6 +214,7 @@ userRoutes.post('/create', (req, res) => {
             avatar: userDB.avatar,
             email: userDB.email,
             celular: userDB.celular,
+            farmerid: userDB.farmerid,
         });
         res.json({
             ok: true,

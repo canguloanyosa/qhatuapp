@@ -290,7 +290,7 @@ userRoutes.post('/create',(req: Request, res: Response) => {
             avatar: userDB.avatar,
             email: userDB.email,
             celular: userDB.celular,
-            // ubicacion: userDB.ubicacion,
+            farmerid: userDB.farmerid,
             // departamento: userDB.departamento,
             // provincia: userDB.provincia,
             // region: userDB.region,
