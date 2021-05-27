@@ -176,15 +176,32 @@ compraRoutes.delete('/:id', (req, res) => {
         });
     });
 });
-//Obetner Usuarios TODOS
-// servicioRoutes.get('/exportar', async (req: any, res: any) => {
-//     const [ servicios ] =  await Promise.all([
-//                                     Servicio.find()
-//                                     .sort({_id: -1})    
-//     ]);
-//     res.json({
-//         ok: true,
-//         servicios,
-//     });
-// });
+// Actualizar compras
+compraRoutes.post('/updatecompra/:id', (req, res) => {
+    const id = req.params.id;
+    const compra = {
+        nombre: req.body.nombre,
+        dni: req.body.dni,
+        email: req.body.email,
+        celular: req.body.celular,
+        precio: req.body.precio,
+        cantidad: req.body.cantidad,
+        total: req.body.total,
+        farmerid: req.body.farmerid
+    };
+    compra_model_1.Compra.findByIdAndUpdate(id, compra, { new: true }, (err, compra) => {
+        if (err)
+            throw err;
+        if (!compra) {
+            return res.json({
+                ok: false,
+                mensaje: 'Invalid data'
+            });
+        }
+        res.json({
+            ok: true,
+        });
+        compra;
+    });
+});
 exports.default = compraRoutes;
