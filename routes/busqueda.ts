@@ -8,6 +8,8 @@ import { Admin } from '../models/admin.model';
 import { Usuario } from "../models/usuario.model";
 import { Socio } from '../models/socio.model';
 import { Compra } from '../models/compra.model';
+import { Servicio } from '../models/servicio.model';
+import { Servicio2 } from '../models/servicio2.model';
 
 
 const busquedaRouter = Router();
@@ -103,10 +105,15 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
         break;
 
 
-        case 'nombre':
-            data = await Compra.find({ nombre: regex })
-                                                        .populate('socio', 'nombre dni email celular');              
-                                        
+        case 'servicio':
+            data = await Servicio.find({ sede:regex })
+                                                        .populate('usuario', 'avatar nombre dni email celular');                                        
+        break;
+
+
+        case 'servicio2':
+            data = await Servicio2.find({ sede: regex })
+                                                        .populate('usuario', 'nombre dni email celular');                                        
         break;
 
 

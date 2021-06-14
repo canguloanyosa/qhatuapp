@@ -37,6 +37,8 @@ const getMenuFrontEnd = (role = '0') => {
         menu[1].submenu.unshift({ titulo: 'Precios APP', url: 'precios' });
         menu[1].submenu.unshift({ titulo: 'Compras Sede APP', url: 'ventas-sede' });
         menu[1].submenu.unshift({ titulo: 'Noticias APP', url: 'noticia' });
+        // menu[1].submenu.unshift({ titulo: 'Servicio AT', url: 'asistencia-sede'})
+        menu[1].submenu.unshift({ titulo: 'Recojo de Cacao', url: 'recogo-sede' });
     }
     return menu;
 };

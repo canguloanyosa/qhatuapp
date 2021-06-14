@@ -17,6 +17,8 @@ const admin_model_1 = require("../models/admin.model");
 const usuario_model_1 = require("../models/usuario.model");
 const socio_model_1 = require("../models/socio.model");
 const compra_model_1 = require("../models/compra.model");
+const servicio_model_1 = require("../models/servicio.model");
+const servicio2_model_1 = require("../models/servicio2.model");
 const busquedaRouter = express_1.Router();
 //Buscar Todo
 busquedaRouter.get('/:busqueda', validarJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -80,9 +82,13 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda', (req, res) => __awaiter(void 0
             data = yield compra_model_1.Compra.find({ sede: regex })
                 .populate('socio', 'nombre dni email celular');
             break;
-        case 'nombre':
-            data = yield compra_model_1.Compra.find({ nombre: regex })
-                .populate('socio', 'nombre dni email celular');
+        case 'servicio':
+            data = yield servicio_model_1.Servicio.find({ sede: regex })
+                .populate('usuario', 'avatar nombre dni email celular');
+            break;
+        case 'servicio2':
+            data = yield servicio2_model_1.Servicio2.find({ sede: regex })
+                .populate('usuario', 'nombre dni email celular');
             break;
         case 'socio':
             data = yield socio_model_1.Socio.find({ nombre: regex })
