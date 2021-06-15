@@ -281,6 +281,22 @@ compraRoutes.post('/updatecompra/:id', (req: any, res: Response) => {
 
 
 
+
+//Obetner Usuarios TODOS
+compraRoutes.get('/exportar', async (req: any, res: any) => {
+    const [ compra, total] =  await Promise.all([
+                                    Compra.find({}, ' -_id  dni nombre celular precio cantidad total sede created')
+                                    .sort({_id: -1})    
+    ]);
+    res.json({
+        ok: true,
+        compra,
+    });
+});
+
+
+
+
 export default compraRoutes;
 
 

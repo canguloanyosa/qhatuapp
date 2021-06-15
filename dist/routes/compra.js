@@ -204,4 +204,15 @@ compraRoutes.post('/updatecompra/:id', (req, res) => {
         compra;
     });
 });
+//Obetner Usuarios TODOS
+compraRoutes.get('/exportar', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const [compra, total] = yield Promise.all([
+        compra_model_1.Compra.find({}, ' -_id  dni nombre celular precio cantidad total sede created')
+            .sort({ _id: -1 })
+    ]);
+    res.json({
+        ok: true,
+        compra,
+    });
+}));
 exports.default = compraRoutes;
