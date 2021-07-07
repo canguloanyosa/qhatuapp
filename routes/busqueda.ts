@@ -98,6 +98,7 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
         break;
 
 
+
         case 'compra':
             data = await Compra.find({ sede:regex })
                                                         .populate('socio', 'nombre dni email celular');              

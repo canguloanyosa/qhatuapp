@@ -47,6 +47,7 @@ userRoutes.post('/login', (req, res) => {
                 provincia: userDB.provincia,
                 region: userDB.region,
                 farmerid: userDB.farmerid,
+                sede: userDB.sede,
                 password: req.body.password,
                 password_show: req.body.password_show,
             });
@@ -316,15 +317,6 @@ userRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
 //actualizar push 
 userRoutes.post('/updatepush', autenticacion_1.verificaToken, (req, res) => {
     const user = {
-        // nombre: req.body.nombre || req.usuario.nombre,
-        // dni: req.body.dni || req.usuario.dni,
-        // avatar: req.body.avatar || req.usuario.avatar,
-        // email: req.body.email || req.usuario.email,
-        // celular: req.body.celular || req.usuario.celular,
-        // ubicacion: req.body.ubicacion || req.usuario.ubicacion,
-        // departamento: req.body.departamento || req.usuario.departamento,
-        // provincia: req.body.provincia || req.usuario.provincia,
-        // region: req.body.region || req.usuario.region,
         push: req.body.push || req.usuario.push,
     };
     usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
@@ -337,17 +329,6 @@ userRoutes.post('/updatepush', autenticacion_1.verificaToken, (req, res) => {
             });
         }
         const tokenUser = token_1.default.getJwtToken({
-            // _id: userDB._id, 
-            // nombre: userDB.nombre,
-            // dni: userDB.dni,
-            // avatar: userDB.avatar,
-            // password: userDB.password,
-            // password_show: userDB.password_show,
-            // email: userDB.email,
-            // celular: userDB.celular,
-            // ubicacion: userDB.ubicacion,
-            // departamento: userDB.departamento,
-            // provincia: userDB.provincia,
             push: userDB.push,
         });
         res.json({
@@ -393,7 +374,6 @@ userRoutes.post('/updatepass', autenticacion_1.verificaToken, (req, res) => {
             ubicacion: userDB.ubicacion,
             departamento: userDB.departamento,
             provincia: userDB.provincia,
-            // farmerid: userDB.farmerid,
             region: userDB.region,
         });
         var transporter = nodemailer_1.default.createTransport({
@@ -490,6 +470,7 @@ userRoutes.post('/update_farmerid/:id', (req, res) => {
         nombre: req.body.nombre || req.usuario.nombre,
         dni: req.body.dni || req.usuario.dni,
         email: req.body.email || req.usuario.email,
+        sede: req.body.sede || req.usuario.sede,
         farmerid: req.body.farmerid || req.usuario.farmerid
     };
     usuario_model_1.Usuario.findByIdAndUpdate(id, usuario, { new: true }, (err, usuario) => {

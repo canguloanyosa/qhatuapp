@@ -63,8 +63,11 @@ const usuarioSchema = new Schema({
     farmerid: {
         type: String,
         default: 'FID0000'
+    },
+    sede: {
+        type: String,
+        default: 'General'
     }
-
 
 
 });
@@ -94,6 +97,7 @@ interface IUsuario extends Document {
     departamento: string;
     provincia: string;
     region: string;
+    sede: string;
     // google: Boolean;
     // idFb: String;
     // idGoogle: String;

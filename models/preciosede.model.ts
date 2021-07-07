@@ -1,8 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Precio = void 0;
-const mongoose_1 = require("mongoose");
-const precioSchema = new mongoose_1.Schema({
+import { Schema, Document ,model } from 'mongoose';
+
+const preciosedeSchema = new Schema ({
+
     created: {
         type: Date
     },
@@ -30,14 +29,32 @@ const precioSchema = new mongoose_1.Schema({
     img: {
         type: String,
         default: ''
+
     },
     sede: {
         type: String,
-        default: 'General'
     }
+
+
+
 });
-precioSchema.pre('save', function (next) {
+
+preciosedeSchema.pre<IPrecioSede>('save', function( next ) {
     this.created = new Date();
     next();
 });
-exports.Precio = mongoose_1.model('Precio', precioSchema);
+
+interface IPrecioSede extends Document {
+    created: Date;
+    humedo1: number;
+    seco1: number;
+    humedo2: number;
+    seco2: number;
+    humedo3: number;
+    seco3: number;
+    comentario: number;
+    img: string;
+    sede: string;
+}
+
+export const PrecioSede = model<IPrecioSede>('PricioSede', preciosedeSchema);

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Precio = void 0;
+exports.PrecioSede = void 0;
 const mongoose_1 = require("mongoose");
-const precioSchema = new mongoose_1.Schema({
+const preciosedeSchema = new mongoose_1.Schema({
     created: {
         type: Date
     },
@@ -33,11 +33,10 @@ const precioSchema = new mongoose_1.Schema({
     },
     sede: {
         type: String,
-        default: 'General'
     }
 });
-precioSchema.pre('save', function (next) {
+preciosedeSchema.pre('save', function (next) {
     this.created = new Date();
     next();
 });
-exports.Precio = mongoose_1.model('Precio', precioSchema);
+exports.PrecioSede = mongoose_1.model('PricioSede', preciosedeSchema);

@@ -8,6 +8,8 @@ import bodyParser from 'body-parser';
 import fileUpload from 'express-fileupload';
 import servicioRoutes from "./routes/servicio";
 import precioRoutes from "./routes/precio";
+import preciosedeRoutes from "./routes/preciosede";
+
 import noticiaRoutes from "./routes/noticia";
 import servicio2Routes from "./routes/servicio2";
 import propiedadesRoutes from "./routes/propiedades";
@@ -60,6 +62,8 @@ server.app.use('/compras', compraRoutes);
 
 server.app.use('/servicios2', servicio2Routes);
 server.app.use('/precios', precioRoutes);
+server.app.use('/preciosede', preciosedeRoutes);
+
 server.app.use('/version', versionRoutes);
 server.app.use('/noticia', noticiaRoutes);
 server.app.use('/propiedades', propiedadesRoutes);

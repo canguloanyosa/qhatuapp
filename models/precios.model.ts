@@ -30,6 +30,10 @@ const precioSchema = new Schema ({
         type: String,
         default: ''
 
+    },
+    sede: {
+        type: String,
+        default: 'General'
     }
 
 
@@ -51,6 +55,7 @@ interface IPrecio extends Document {
     seco3: number;
     comentario: number;
     img: string;
+    sede: string;
 }
 
 export const Precio = model<IPrecio>('Precio', precioSchema);

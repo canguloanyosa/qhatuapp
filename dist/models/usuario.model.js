@@ -61,6 +61,10 @@ const usuarioSchema = new mongoose_1.Schema({
     farmerid: {
         type: String,
         default: 'FID0000'
+    },
+    sede: {
+        type: String,
+        default: 'General'
     }
 });
 usuarioSchema.method('compararPassword', function (password = '') {

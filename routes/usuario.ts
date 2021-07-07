@@ -39,7 +39,7 @@ userRoutes.post('/login', (req: Request, res: Response) => {
                 provincia: userDB.provincia,
                 region: userDB.region,
                 farmerid: userDB.farmerid,
-
+                sede: userDB.sede,
                 password: req.body.password,
                 password_show: req.body.password_show,
                 
@@ -424,21 +424,8 @@ userRoutes.post('/update', verificaToken , (req: any, res: Response) => {
 userRoutes.post('/updatepush', verificaToken , (req: any, res: Response) => {
 
     const user = {
-        // nombre: req.body.nombre || req.usuario.nombre,
-        // dni: req.body.dni || req.usuario.dni,
-        // avatar: req.body.avatar || req.usuario.avatar,
-        // email: req.body.email || req.usuario.email,
-        // celular: req.body.celular || req.usuario.celular,
-        // ubicacion: req.body.ubicacion || req.usuario.ubicacion,
-        // departamento: req.body.departamento || req.usuario.departamento,
-        // provincia: req.body.provincia || req.usuario.provincia,
-        // region: req.body.region || req.usuario.region,
         push: req.body.push || req.usuario.push,
-        // password_show:  req.body.password_show,
-        // password: bcrypt.hashSync(req.body.password_show, 10),
     }
-
-
 
     Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true}, (err, userDB) => {
         if(err) throw err;
@@ -450,19 +437,7 @@ userRoutes.post('/updatepush', verificaToken , (req: any, res: Response) => {
             });
         }
         const tokenUser = Token.getJwtToken({
-            // _id: userDB._id, 
-            // nombre: userDB.nombre,
-            // dni: userDB.dni,
-            // avatar: userDB.avatar,
-            // password: userDB.password,
-            // password_show: userDB.password_show,
-            // email: userDB.email,
-            // celular: userDB.celular,
-            // ubicacion: userDB.ubicacion,
-            // departamento: userDB.departamento,
-            // provincia: userDB.provincia,
             push: userDB.push,
-            // region: userDB.region,
         });
 
 
@@ -518,7 +493,6 @@ userRoutes.post('/updatepass', verificaToken , (req: any, res: Response) => {
             ubicacion: userDB.ubicacion,
             departamento: userDB.departamento,
             provincia: userDB.provincia,
-            // farmerid: userDB.farmerid,
             region: userDB.region,
         });
 
@@ -649,7 +623,7 @@ userRoutes.post('/update_farmerid/:id', (req: any, res: Response) => {
         nombre: req.body.nombre || req.usuario.nombre,
         dni: req.body.dni || req.usuario.dni,
         email: req.body.email || req.usuario.email,
-
+        sede: req.body.sede || req.usuario.sede,
         farmerid: req.body.farmerid ||  req.usuario.farmerid
 
     }
@@ -717,8 +691,6 @@ userRoutes.get('/obtener', async (req: any, res: any) => {
         id: req.id 
     });
 });
-
-
 
 
 
