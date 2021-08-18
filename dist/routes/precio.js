@@ -67,7 +67,7 @@ precioRoutes.get('/30', (req, res) => __awaiter(void 0, void 0, void 0, function
     const desde = Number(req.query.desde) || 0;
     console.log(desde);
     const [precios, total] = yield Promise.all([
-        precios_model_1.Precio.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede')
+        precios_model_1.Precio.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede img')
             .sort({ _id: -1 })
             // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)

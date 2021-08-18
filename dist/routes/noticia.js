@@ -19,7 +19,7 @@ noticiaRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
     const noticias = yield noticia_model_1.Noticia.find()
         .sort({ _id: -1 })
         .skip(skip)
-        .limit(10)
+        .limit(30)
         .populate('usuario', '-password')
         .exec();
     res.json({
