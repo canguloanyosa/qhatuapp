@@ -101,7 +101,7 @@ compraRoutes.get('/listar', async(req: any, res: Response) => {
     const compras = await Compra.find()
     .sort({_id: -1})
     .skip(skip)
-    .limit(10)
+    .limit(80)
     .populate('socio')
     .exec();
 
@@ -127,7 +127,7 @@ compraRoutes.get('/10', async (req: any, res: any) => {
                                     .sort({_id: -1})          
                                     // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
-                                    .limit( 10 ),
+                                    .limit( 80 ),
                                     Compra.countDocuments()
     ]);
     res.json({
@@ -262,7 +262,8 @@ compraRoutes.post('/updatecompra/:id', (req: any, res: Response) => {
         precio: req.body.precio,
         cantidad: req.body.cantidad,
         total: req.body.total,
-        farmerid: req.body.farmerid
+        farmerid: req.body.farmerid,
+        estado: req.body.estado
     }
     Compra.findByIdAndUpdate(id, compra, {new: true}, (err, compra) => {
         if(err) throw err;

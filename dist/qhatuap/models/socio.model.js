@@ -3,21 +3,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Socio = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const userSchema = new mongoose_1.Schema({
+const socioSchema = new mongoose_1.Schema({
     nombre: {
         type: String,
-        // required: [true, 'El nombre es necesario'] 
     },
     dni: {
         type: String,
-        required: [true, 'El documento de identidad es necesario']
+        required: [true, 'El documento de identidad es necesario'],
+        unique: true
     },
     password: {
         type: String,
-        // required: [true, 'La contraseña es necesaria']
     },
     password_show: {
         type: String,
@@ -51,27 +50,12 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         default: 'av-10.png'
     },
-    google: {
-        type: Boolean,
-        default: false
-    },
-    facebook: {
-        type: Boolean,
-        default: false
-    },
-    idFb: {
+    push: {
         type: String,
-        unique: true,
-    },
-    idGoogle: {
-        type: String,
-        unique: true
-    },
-    perfil: {
-        type: String,
+        item: null
     }
 });
-userSchema.method('compararPassword', function (password = '') {
+socioSchema.method('compararPassword', function (password = '') {
     if (bcrypt_1.default.compareSync(password, this.password)) {
         return true;
     }
@@ -79,4 +63,4 @@ userSchema.method('compararPassword', function (password = '') {
         return false;
     }
 });
-exports.User = mongoose_1.model('User', userSchema);
+exports.Socio = mongoose_1.model('Socio', socioSchema);

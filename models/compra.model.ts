@@ -33,6 +33,9 @@ const compraSchema = new Schema ({
     precio: {
         type: String
     },
+    precioold: {
+        type: String
+    },
     cantidad: {
         type: String
     },
@@ -109,6 +112,7 @@ interface ICompra extends Document {
     calificacion: string;
     estado: string;
     farmerid: string;
+    precioold: string;
 }
 //FF
 

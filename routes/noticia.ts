@@ -18,7 +18,7 @@ noticiaRoutes.get('/', async(req: any, res: Response) => {
     const noticias = await Noticia.find()
                                 .sort({_id: -1})
                                 .skip(skip)
-                                .limit(30)
+                                .limit(40)
                                 .populate('usuario','-password')
                                 .exec();
     res.json({

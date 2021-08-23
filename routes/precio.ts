@@ -87,7 +87,7 @@ precioRoutes.get('/30', async (req: any, res: any) => {
     console.log(desde);
 
     const [ precios, total] =  await Promise.all([
-                                    Precio.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede img')
+                                    Precio.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede')
                                     .sort({_id: -1})          
                                     // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
