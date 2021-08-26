@@ -207,10 +207,6 @@ userRoutes.post('/create', (req, res) => {
         celular: req.body.celular,
         sede: req.body.sede,
         farmerid: req.body.farmerid,
-        // ubicacion: req.body.ubicacion,
-        // departamento: req.body.departamento,
-        // provincia: req.body.provincia,
-        // region: req.body.region,
     };
     usuario_model_1.Usuario.create(user).then(userDB => {
         const tokenUser = token_1.default.getJwtToken({
@@ -222,9 +218,6 @@ userRoutes.post('/create', (req, res) => {
             celular: userDB.celular,
             farmerid: userDB.farmerid,
             sede: userDB.sede,
-            // departamento: userDB.departamento,
-            // provincia: userDB.provincia,
-            // region: userDB.region,
         });
         res.json({
             ok: true,
@@ -292,8 +285,6 @@ userRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
         departamento: req.body.departamento || req.usuario.departamento,
         provincia: req.body.provincia || req.usuario.provincia,
         region: req.body.region || req.usuario.region,
-        // password_show:  req.body.password_show,
-        // password: bcrypt.hashSync(req.body.password_show, 10),
     };
     usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
         if (err)

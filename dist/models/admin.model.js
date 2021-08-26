@@ -30,7 +30,6 @@ const AdminSchema = new mongoose_1.Schema({
     },
     password_show: {
         type: String,
-        // item: null
     },
     img: {
         type: String,

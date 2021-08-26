@@ -147,15 +147,6 @@ compraRoutes.post('/update/:id', (req, res) => {
     const compra = {
         estado: req.body.estado,
         calificacion: req.body.calificacion,
-        // completado: req.body.completado,
-        // observacion: req.body.observacion,
-        // grano: req.body.grano,
-        // sede: req.body.sede,
-        // tecnico: req.body.tecnico,
-        // comentario: req.body.comentario || req.servicios.comentario,
-        // precio: req.body.precio,
-        // start: req.body.start,
-        // cantidad: req.body.cantidad,
     };
     compra_model_1.Compra.findByIdAndUpdate(id, compra, { new: true }, (err, compra) => {
         if (err)

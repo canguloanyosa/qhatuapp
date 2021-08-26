@@ -22,6 +22,7 @@ import versionRoutes from "./routes/version";
 import socioRoutes from './routes/socio';
 import compraRoutes from './routes/compra';
 
+import photoRoutes from './routes/photo';
 
 
 
@@ -58,6 +59,7 @@ server.app.use('/posts', postRoutes);
 server.app.use('/servicios', servicioRoutes);
 
 server.app.use('/compras', compraRoutes);
+server.app.use('/photo', photoRoutes);
 
 
 server.app.use('/servicios2', servicio2Routes);

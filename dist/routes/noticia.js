@@ -67,8 +67,7 @@ noticiaRoutes.post('/create', (req, res) => {
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
         portada: req.body.portada,
-        color: req.body.color,
-        url: req.body.url,
+        tipo: req.body.tipo,
     };
     noticia_model_1.Noticia.create(noticia).then(noticiaDB => {
         res.json({

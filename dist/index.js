@@ -22,6 +22,7 @@ const express_1 = __importDefault(require("express"));
 const version_1 = __importDefault(require("./routes/version"));
 const socio_1 = __importDefault(require("./routes/socio"));
 const compra_1 = __importDefault(require("./routes/compra"));
+const photo_1 = __importDefault(require("./routes/photo"));
 const server = new server_1.default();
 // const mongoose = require("mongoose");
 //configurar cors 
@@ -40,6 +41,7 @@ server.app.use('/user1', user_1.default);
 server.app.use('/posts', post_1.default);
 server.app.use('/servicios', servicio_1.default);
 server.app.use('/compras', compra_1.default);
+server.app.use('/photo', photo_1.default);
 server.app.use('/servicios2', servicio2_1.default);
 server.app.use('/precios', precio_1.default);
 server.app.use('/preciosede', preciosede_1.default);

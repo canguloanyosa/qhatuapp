@@ -93,8 +93,7 @@ noticiaRoutes.post('/create', (req: Request, res: Response) => {
         titulo: req.body.titulo,
         descripcion: req.body.descripcion,
         portada: req.body.portada,
-        color: req.body.color,
-        url: req.body.url,
+        tipo:  req.body.tipo,
 
     }
 

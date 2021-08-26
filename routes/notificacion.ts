@@ -15,6 +15,7 @@ notificacionRouter.post('/crear', (req: Request, res: Response) => {
         url: req.body.url,
         userId: req.body.userId,
         pushId: req.body.pushId,
+        tipo: req.body.tipo,
 
     }
 
@@ -61,6 +62,21 @@ notificacionRouter.get('/obtener', async (req: any, res: any) => {
     });
 });
 
+
+// Borrar Notificacion 
+notificacionRouter.delete('/:id',    (req: any, res: Response) => {
+    const id = req.params.id;
+
+    Notificacion.findByIdAndRemove(id, (err, notificacion ) => {
+        if(err) throw err;
+
+        res.json({
+            ok: true,
+            mensaje: 'Notificacion Eliminada',
+            body: notificacion
+        })
+    }); 
+});
 
 
 
