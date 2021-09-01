@@ -20,8 +20,12 @@ const tokenQR_1 = __importDefault(require("../classes/tokenQR"));
 const autenticacion_1 = require("../middlewares/autenticacion");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const userRoutes = express_1.Router();
-const { googleVerify } = require('../helpers/google-verify');
-const { generarJWT } = require('../helpers/jwt');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    cloud_name: 'amazonastrading',
+    api_key: '921375412961546',
+    api_secret: 'mm8GUA4-e2Ck1g6XdJWq5oKjsWc'
+});
 //login
 userRoutes.post('/login', (req, res) => {
     const body = req.body;
@@ -50,6 +54,7 @@ userRoutes.post('/login', (req, res) => {
                 sede: userDB.sede,
                 password: req.body.password,
                 password_show: req.body.password_show,
+                photo: userDB.photo
             });
             res.json({
                 ok: true,
@@ -292,6 +297,7 @@ userRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
         departamento: req.body.departamento || req.usuario.departamento,
         provincia: req.body.provincia || req.usuario.provincia,
         region: req.body.region || req.usuario.region,
+        photo: req.body.photo || req.usuario.photo,
         // password_show:  req.body.password_show,
         // password: bcrypt.hashSync(req.body.password_show, 10),
     };
@@ -309,15 +315,13 @@ userRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
             nombre: userDB.nombre,
             dni: userDB.dni,
             avatar: userDB.avatar,
-            // password: userDB.password,
-            // password_show: userDB.password_show,
-            //fdhfg
             email: userDB.email,
             celular: userDB.celular,
             ubicacion: userDB.ubicacion,
             departamento: userDB.departamento,
             provincia: userDB.provincia,
             region: userDB.region,
+            photo: userDB.photo,
         });
         res.json({
             ok: true,
@@ -602,6 +606,52 @@ userRoutes.get('/ultimo', (req, res) => __awaiter(void 0, void 0, void 0, functi
         ok: true,
         pagina,
         usuario
+    });
+}));
+userRoutes.post('/updatephoto', autenticacion_1.verificaToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { tempFilePath } = req.files.photo;
+    const resp = yield cloudinary.uploader.upload(tempFilePath, { folder: "avatars" });
+    console.log(resp.secure_url);
+    const user = {
+        nombre: req.body.nombre || req.usuario.nombre,
+        dni: req.body.dni || req.usuario.dni,
+        avatar: req.body.avatar || req.usuario.avatar,
+        email: req.body.email || req.usuario.email,
+        celular: req.body.celular || req.usuario.celular,
+        ubicacion: req.body.ubicacion || req.usuario.ubicacion,
+        departamento: req.body.departamento || req.usuario.departamento,
+        provincia: req.body.provincia || req.usuario.provincia,
+        region: req.body.region || req.usuario.region,
+        sede: req.body.sede || req.usuario.sede,
+        photo: resp.secure_url
+    };
+    usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
+        if (err)
+            throw err;
+        if (!userDB) {
+            return res.json({
+                ok: false,
+                mensaje: 'No existe un usuario con ese ID'
+            });
+        }
+        const tokenUser = token_1.default.getJwtToken({
+            _id: userDB._id,
+            nombre: userDB.nombre,
+            dni: userDB.dni,
+            avatar: userDB.avatar,
+            email: userDB.email,
+            celular: userDB.celular,
+            ubicacion: userDB.ubicacion,
+            departamento: userDB.departamento,
+            provincia: userDB.provincia,
+            region: userDB.region,
+            sede: userDB.sede,
+            photo: userDB.photo,
+        });
+        res.json({
+            ok: true,
+            token: tokenUser
+        });
     });
 }));
 exports.default = userRoutes;

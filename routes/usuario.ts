@@ -4,15 +4,17 @@ import  bcrypt  from 'bcrypt';
 import Token from "../classes/token";
 import TokenQR from "../classes/tokenQR";
 import { verificaToken } from "../middlewares/autenticacion";
-
 import  nodemailer  from "nodemailer";
-import { verificaTokenQR } from '../middlewares/authqr';
-
 const userRoutes = Router();
 
+const cloudinary = require('cloudinary').v2
+cloudinary.config({ 
+    cloud_name: 'amazonastrading', 
+    api_key: '921375412961546',
+    api_secret: 'mm8GUA4-e2Ck1g6XdJWq5oKjsWc'
+});
 
-const { googleVerify } = require('../helpers/google-verify');
-const { generarJWT } = require ('../helpers/jwt'); 
+
 
 //login
 userRoutes.post('/login', (req: Request, res: Response) => {
@@ -42,6 +44,7 @@ userRoutes.post('/login', (req: Request, res: Response) => {
                 sede: userDB.sede,
                 password: req.body.password,
                 password_show: req.body.password_show,
+                photo: userDB.photo
                 
             });
             res.json({
@@ -380,6 +383,7 @@ userRoutes.post('/update', verificaToken , (req: any, res: Response) => {
         departamento: req.body.departamento || req.usuario.departamento,
         provincia: req.body.provincia || req.usuario.provincia,
         region: req.body.region || req.usuario.region,
+        photo: req.body.photo || req.usuario.photo,
 
         // password_show:  req.body.password_show,
         // password: bcrypt.hashSync(req.body.password_show, 10),
@@ -401,17 +405,14 @@ userRoutes.post('/update', verificaToken , (req: any, res: Response) => {
             nombre: userDB.nombre,
             dni: userDB.dni,
             avatar: userDB.avatar,
-
-            // password: userDB.password,
-            // password_show: userDB.password_show,
-            //fdhfg
-
             email: userDB.email,
             celular: userDB.celular,
             ubicacion: userDB.ubicacion,
             departamento: userDB.departamento,
             provincia: userDB.provincia,
             region: userDB.region,
+            photo: userDB.photo,
+
         });
         res.json({
             ok: true,
@@ -790,6 +791,64 @@ userRoutes.get('/ultimo', async (req: any, res: Response ) => {
     });
     
 });
+
+
+
+
+
+userRoutes.post('/updatephoto', verificaToken , async   (req: any, res: Response) => {
+
+    
+    const { tempFilePath } =  req.files.photo;
+    const resp = await cloudinary.uploader.upload(tempFilePath,{folder:"avatars"});
+    console.log(resp.secure_url);
+
+    const user = {
+        nombre: req.body.nombre || req.usuario.nombre,
+        dni: req.body.dni || req.usuario.dni,
+        avatar: req.body.avatar || req.usuario.avatar,
+        email: req.body.email || req.usuario.email,
+        celular: req.body.celular || req.usuario.celular,
+        ubicacion: req.body.ubicacion || req.usuario.ubicacion,
+        departamento: req.body.departamento || req.usuario.departamento,
+        provincia: req.body.provincia || req.usuario.provincia,
+        region: req.body.region || req.usuario.region,
+        sede: req.body.sede || req.usuario.sede,
+        photo: resp.secure_url
+    }
+
+
+        Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true}, (err, userDB) => {
+            if(err) throw err;
+
+            if(!userDB){
+                return res.json({
+                    ok: false,
+                    mensaje: 'No existe un usuario con ese ID'
+                });
+            }
+
+        const tokenUser = Token.getJwtToken({
+            _id: userDB._id, 
+            nombre: userDB.nombre,
+            dni: userDB.dni,
+            avatar: userDB.avatar,
+            email: userDB.email,
+            celular: userDB.celular,
+            ubicacion: userDB.ubicacion,
+            departamento: userDB.departamento,
+            provincia: userDB.provincia,
+            region: userDB.region,
+            sede: userDB.sede,
+            photo: userDB.photo,
+        });
+        res.json({
+            ok: true,
+            token: tokenUser
+        });
+    });
+});
+
 
 
 

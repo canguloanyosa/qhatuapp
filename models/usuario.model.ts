@@ -1,17 +1,13 @@
 import {Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
-
 var mongoose = require('mongoose');  // 1. require mongoose
-var autoIncrement = require('mongoose-auto-increment');
 
 
 
 const usuarioSchema = new Schema({
 
-
     nombre: {
         type: String,
-        // required: [true, 'El nombre es necesario'] 
     },
     dni: {
         type: String,
@@ -67,6 +63,10 @@ const usuarioSchema = new Schema({
     sede: {
         type: String,
         default: 'General'
+    },
+    photo: {
+        type: String,
+        default: 'https://res.cloudinary.com/amazonastrading/image/upload/v1630099731/avatars/none_idnj9j.png'
     }
 
 
@@ -98,21 +98,13 @@ interface IUsuario extends Document {
     provincia: string;
     region: string;
     sede: string;
-    // google: Boolean;
-    // idFb: String;
-    // idGoogle: String;
     perfil: String;
-    // facebook: Boolean;
     farmerid: string;
     push: string;
+    photo: string;
     compararPassword(password: string): boolean;
 }
 
 
-// autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
-// usuarioSchema.plugin(autoIncrement.plugin, 'UsuarioNew'); 
-// usuarioSchema.plugin(autoIncrement.plugin, 'Usuario'); 
-// jdjfjkdsfjksdfdsyyyydd
 
-// export const Usuario = model<IUsuario>('UsuarioNew', usuarioSchema);
 export const Usuario = model<IUsuario>('Usuario', usuarioSchema);
