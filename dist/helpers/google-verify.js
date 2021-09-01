@@ -13,7 +13,9 @@ const client = new OAuth2Client(process.env.GOOGLE_ID);
 const googleVerify = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const ticket = yield client.verifyIdToken({
         idToken: token,
-        audience: process.env.GOOGLE_ID,
+        audience: process.env.GOOGLE_ID, // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
     const payload = ticket.getPayload();
     const userid = payload['sub'];

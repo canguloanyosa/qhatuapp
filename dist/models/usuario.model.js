@@ -11,6 +11,7 @@ var autoIncrement = require('mongoose-auto-increment');
 const usuarioSchema = new mongoose_1.Schema({
     nombre: {
         type: String,
+        // required: [true, 'El nombre es necesario'] 
     },
     dni: {
         type: String,
@@ -19,6 +20,7 @@ const usuarioSchema = new mongoose_1.Schema({
     },
     password: {
         type: String,
+        // required: [true, 'La contraseña es necesaria']
     },
     password_show: {
         type: String,

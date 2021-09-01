@@ -31,7 +31,10 @@ server.app.use(cors_1.default({ origin: true, credentials: true }));
 server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());
 //FileUpload
-server.app.use(express_fileupload_1.default());
+server.app.use(express_fileupload_1.default({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
+}));
 //Directorio Publico
 server.app.use(express_1.default.static('public'));
 //rutas de mi aplicacion

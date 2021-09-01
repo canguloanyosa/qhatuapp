@@ -41,7 +41,11 @@ server.app.use(bodyParser.json());
 
 
 //FileUpload
-server.app.use(fileUpload() );
+server.app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
+
 
 
 
