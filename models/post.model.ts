@@ -19,6 +19,10 @@ const postSchema = new Schema ({
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: [true, 'Debe existir una referencia a un usuario']
+    },
+    respuestas: {
+        type: String,
+        default: '[]'
     }
 
 
@@ -35,6 +39,7 @@ interface IPost extends Document {
     img: string[];
     coords: string;
     usuario: string;
+    respuestas: string;
 }
 
 export const Post = model<IPost>('Post', postSchema);

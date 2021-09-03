@@ -44,4 +44,26 @@ postRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
         res.json(err);
     });
 });
+// Agregar comentario
+postRoutes.post('/update/:id', (req, res) => {
+    const id = req.params.id;
+    const post = {
+        respuestas: req.body.respuestas,
+    };
+    post_model_1.Post.findByIdAndUpdate(id, post, { new: true }, (err, post) => {
+        if (err)
+            throw err;
+        if (!post) {
+            return res.json({
+                ok: false,
+                mensaje: 'Invalid data'
+            });
+        }
+        res.json({
+            ok: true,
+            post
+        });
+        post;
+    });
+});
 exports.default = postRoutes;

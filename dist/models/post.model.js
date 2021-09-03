@@ -19,6 +19,10 @@ const postSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Usuario',
         required: [true, 'Debe existir una referencia a un usuario']
+    },
+    respuestas: {
+        type: String,
+        default: '[]'
     }
 });
 postSchema.pre('save', function (next) {
