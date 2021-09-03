@@ -15,7 +15,6 @@ cloudinary.config({
 });
 
 
-
 //login
 userRoutes.post('/login', (req: Request, res: Response) => {
     const body = req.body;
@@ -59,9 +58,6 @@ userRoutes.post('/login', (req: Request, res: Response) => {
         }
     });
 });
-
-
-
 
 
 userRoutes.post('/qr', (req: Request, res: Response) => {
@@ -108,160 +104,8 @@ userRoutes.post('/qr', (req: Request, res: Response) => {
 
 
 
-//Iniciar Sesion con Facebo
-userRoutes.post('/login/createFb', async (req, res = response) => {
-
-    const user = {
-        nombre: req.body.nombre,
-        avatar: req.body.avatar,
-        email: req.body.email,
-        idFb: req.body.idFb,
-        dni: req.body.dni,
-
-        password: req.body.password
-    };
-
-    Usuario.create( user ).then( userDB => {
-
-
-        const tokenUser = Token.getJwtToken({
-            _id: userDB._id, 
-            nombre: userDB.nombre,
-            avatar: userDB.avatar,
-            email: userDB.email,
-            // idFb: userDB.idFb,
-            dni: userDB.dni,
-
-            password: userDB.password
-
-
-        });
-        res.json({
-            ok: true,
-            user,
-            token: tokenUser
-        });
-
-    }).catch(err =>  {
-        res.json({
-            ok: false,
-            err
-        });
-    });  
-
-});
-
-
-
-
-
-
-//Iniciar Sesion con Google
-userRoutes.post('/login/google', async (req, res = response) => {
-
-    const user = {
-        nombre: req.body.nombre,
-        dni: req.body.dni,
-        email: req.body.email,
-        perfil: req.body.perfil,
-        password: req.body.password,
-        idGoogle: req.body.idGoogle,
-        
-    };
-
-
-
-
-    try {
-
-        const { nombre, email , dni ,perfil, password, idGoogle } = await user;
-        const userDB = await Usuario.findOne({idGoogle});
-        
-    
-                 
-        let usuario;
-
-
-        if(!userDB) {
-          
-            
-            usuario = new Usuario({
-                nombre: nombre,
-                dni: dni,
-                email: email,
-                perfil: perfil,
-                password: '@@@',
-                idGoogle: idGoogle,
-                google: true,
-            });
-        
-
-    
-
-        } else {
-            //existe usuario
-            usuario = userDB;
-            // usuario.google = true
-
-        }
-
-        // Guardar en Base de datos
-
-        await usuario.save();
-
-        const tokenUser = Token.getJwtToken({
-            _id: usuario._id, 
-            nombre: usuario.nombre,
-            dni: usuario.dni,
-            avatar: usuario.avatar,
-            email: usuario.email,
-            celular: usuario.celular,
-            ubicacion: usuario.ubicacion,
-            departamento: usuario.departamento,
-            provincia: usuario.provincia,
-            region: usuario.region,
-
-            password: req.body.password,
-            password_show: req.body.password_show,
-            
-        });
-
-        
-
-        res.json({
-            ok: true,
-            msg: 'Google Login',
-            user,
-            token: tokenUser 
-        });
-
-    } catch {
-
-        res.status(401).json({
-            ok: false,
-            msg: 'Ups Error'
-        })
-
-    }
-
-
-   
-
-});
-
-
-
-
-
-
-
-
-
 //crear usuario
 userRoutes.post('/create',(req: Request, res: Response) => {
-
-
-    
     const user = {
         nombre: req.body.nombre,
         dni: req.body.dni,
@@ -272,21 +116,9 @@ userRoutes.post('/create',(req: Request, res: Response) => {
         celular: req.body.celular,
         sede: req.body.sede,
         farmerid: req.body.farmerid,
-
-        // ubicacion: req.body.ubicacion,
-        // departamento: req.body.departamento,
-        // provincia: req.body.provincia,
-        // region: req.body.region,
-
-        
-
     };
 
-   
-
     Usuario.create( user ).then( userDB => {
-
-
         const tokenUser = Token.getJwtToken({
             _id: userDB._id, 
             nombre: userDB.nombre,
@@ -296,9 +128,6 @@ userRoutes.post('/create',(req: Request, res: Response) => {
             celular: userDB.celular,
             farmerid: userDB.farmerid,
             sede: userDB.sede,
-            // departamento: userDB.departamento,
-            // provincia: userDB.provincia,
-            // region: userDB.region,
         });
         res.json({
             ok: true,
@@ -333,7 +162,6 @@ userRoutes.post('/create',(req: Request, res: Response) => {
                 console.log("Email enviado");
             }
         });
-
     }).catch(err =>  {
         res.json({
             ok: false,
@@ -344,10 +172,8 @@ userRoutes.post('/create',(req: Request, res: Response) => {
 
 
 
-
-//crear precios 
+//recuperar 
 userRoutes.post('/recuperar',  (req: any, res: Response ) => {
-
     const body = {
         dni: req.body.dni,
         nombre: req.body.nombre,
@@ -365,11 +191,6 @@ userRoutes.post('/recuperar',  (req: any, res: Response ) => {
 });
 
 
-
-
-
-
-
 //actualizar usuario
 userRoutes.post('/update', verificaToken , (req: any, res: Response) => {
 
@@ -384,12 +205,7 @@ userRoutes.post('/update', verificaToken , (req: any, res: Response) => {
         provincia: req.body.provincia || req.usuario.provincia,
         region: req.body.region || req.usuario.region,
         photo: req.body.photo || req.usuario.photo,
-
-        // password_show:  req.body.password_show,
-        // password: bcrypt.hashSync(req.body.password_show, 10),
-  
     }
-
 
     Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true}, (err, userDB) => {
         if(err) throw err;
@@ -425,11 +241,9 @@ userRoutes.post('/update', verificaToken , (req: any, res: Response) => {
 
 //actualizar push 
 userRoutes.post('/updatepush', verificaToken , (req: any, res: Response) => {
-
     const user = {
         push: req.body.push || req.usuario.push,
     }
-
     Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true}, (err, userDB) => {
         if(err) throw err;
 
@@ -442,9 +256,6 @@ userRoutes.post('/updatepush', verificaToken , (req: any, res: Response) => {
         const tokenUser = Token.getJwtToken({
             push: userDB.push,
         });
-
-
-
         res.json({
             ok: true,
             token: tokenUser
@@ -517,10 +328,8 @@ userRoutes.post('/updatepass', verificaToken , (req: any, res: Response) => {
             from: "qhatucacao@gmail.com",
             to: user.email,
             subject: "ACTUALIZACION DE CONTRASEÑA QHATU CACAO APP",
-            html: `<html><head><title>QHATU CACAO APP 2020</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://admin.amazonastrading.com.pe/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${user.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${user.dni} </li> <li>CLAVE:  ${user.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://admin.amazonastrading.com.pe/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
+            html: `<html><head><title>QHATU CACAO APP 2021</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://amazonastrading.com.pe/recursos/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${user.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${user.dni} </li> <li>CLAVE:  ${user.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://amazonastrading.com.pe/recursos/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
         }
-    
-    
     
         transporter.sendMail(mailOptions, (error, info) => {
             if(error) {
@@ -534,7 +343,6 @@ userRoutes.post('/updatepass', verificaToken , (req: any, res: Response) => {
                 console.log("Email enviado");
             }
         });
-
 
         res.json({
             ok: true,
@@ -567,7 +375,6 @@ userRoutes.post('/update_pass/:id', (req: any, res: Response) => {
             })
         }
 
-
         var transporter = nodemailer.createTransport({
 
             host: "smtp.gmail.com",
@@ -583,10 +390,8 @@ userRoutes.post('/update_pass/:id', (req: any, res: Response) => {
             from: "qhatucacao@gmail.com",
             to: usuario.email,
             subject: "ACCESOS QHATU CACAO APP - IMPORTANTE",
-            html: `<html><head><title>DINDON APP</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://deliverydindon.com/assets/img/landing/mapa.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>BIENVENIDO Chamo, tu registro fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos son los siguientes: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>USUARIO: dindon@gmail.com </li> <li>CLAVE:  *&$#*_% </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://admin.amazonastrading.com.pe/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
+            html: `<html><head><title>QHATU CACAO APP 2021</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://amazonastrading.com.pe/recursos/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${usuario.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${usuario.dni} </li> <li>CLAVE:  ${usuario.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://amazonastrading.com.pe/recursos/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
         }
-    
-    
     
         transporter.sendMail(mailOptions, (error, info) => {
             if(error) {
@@ -628,7 +433,6 @@ userRoutes.post('/update_farmerid/:id', (req: any, res: Response) => {
         email: req.body.email || req.usuario.email,
         sede: req.body.sede || req.usuario.sede,
         farmerid: req.body.farmerid ||  req.usuario.farmerid
-
     }
     Usuario.findByIdAndUpdate(id, usuario, {new: true}, (err, usuario) => {
         if(err) throw err;
@@ -638,20 +442,13 @@ userRoutes.post('/update_farmerid/:id', (req: any, res: Response) => {
                 mensaje: 'Invalid data'
             })
         }
-
         res.json({
             ok: true,
             msg: 'Farmer ID actualizada correctamente',
             usuario
-            
         });usuario
     })
 });
-
-
-
-
-
 
 
 userRoutes.get('/', [ verificaToken ], ( req: any, res: Response ) => {
@@ -662,7 +459,6 @@ userRoutes.get('/', [ verificaToken ], ( req: any, res: Response ) => {
     });
 });
 
-
 userRoutes.get('/', [verificaToken], (req: any, res: Response) => {
     const usuario = req.usuario;
     res.json({
@@ -670,8 +466,6 @@ userRoutes.get('/', [verificaToken], (req: any, res: Response) => {
         usuario
     });
 });
-
-
 
 
 //Obetner Usuarios x2
@@ -696,18 +490,11 @@ userRoutes.get('/obtener', async (req: any, res: any) => {
 });
 
 
-
-
-
-
 //Borrar 
-
 userRoutes.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
-
     Usuario.findByIdAndRemove(id, (err, usuario ) => {
         if(err) throw err;
-
         res.json({
             ok: true,
             mensaje: 'Usuario APP Eliminado',
@@ -715,12 +502,6 @@ userRoutes.delete('/:id',    (req: any, res: Response) => {
         })
     }); 
 });
-
-
-
-
-
-
 
 
 //Obetner Usuarios TODOS
@@ -734,7 +515,6 @@ userRoutes.get('/exportar', async (req: any, res: any) => {
         usuario,
     });
 });
-
 
 
 userRoutes.post('/send-email', (req, res) => {
@@ -797,8 +577,6 @@ userRoutes.get('/ultimo', async (req: any, res: Response ) => {
 
 
 userRoutes.post('/updatephoto', verificaToken , async   (req: any, res: Response) => {
-
-    
     const { tempFilePath } =  req.files.photo;
     const resp = await cloudinary.uploader.upload(tempFilePath,{folder:"avatars"});
     console.log(resp.secure_url);
@@ -848,8 +626,6 @@ userRoutes.post('/updatephoto', verificaToken , async   (req: any, res: Response
         });
     });
 });
-
-
 
 
 export default userRoutes;

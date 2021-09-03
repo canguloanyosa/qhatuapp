@@ -81,7 +81,6 @@ compraSchema.pre('save', function (next) {
     this.created = new Date();
     next();
 });
-//FF
 autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
 compraSchema.plugin(autoIncrement.plugin, 'Compra');
 exports.Compra = mongoose_1.model('Compra', compraSchema);

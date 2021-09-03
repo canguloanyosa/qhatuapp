@@ -6,14 +6,12 @@ const schema = new mongoose_1.Schema({
     created: {
         type: Date
     },
-    // title: {
-    //     type: String
-    // },
-    // description: {
-    //     type: String
-    // },
     imagePath: {
         type: String
     }
+});
+schema.pre('save', function (next) {
+    this.created = new Date();
+    next();
 });
 exports.Photo = mongoose_1.model('Photo', schema);

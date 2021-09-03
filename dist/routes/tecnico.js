@@ -13,9 +13,7 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const tecnicoRouter = express_1.Router();
 const tecnico_model_1 = require("../models/tecnico.model");
-const { generarJWT } = require('../helpers/jwt');
 const { validarJWT } = require('../middlewares/validar-jwt');
-// const {  validarCampos } = require('../middlewares/validar-campos');
 //Eliminar Tecnicos
 tecnicoRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
@@ -32,7 +30,6 @@ tecnicoRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, fun
             ok: true,
             msg: 'Tecnico eliminado'
         });
-        //hhs
     }
     catch (error) {
         res.status(500).json({
@@ -81,7 +78,6 @@ tecnicoRouter.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, functi
 //Crear Tecnico
 tecnicoRouter.post('/', [
     validarJWT,
-    // validarCampos,
     express_validator_1.check('nombre', 'El tecnico del tecnico es obligatorio').not().isEmpty(),
     express_validator_1.check('sede', 'La sede id debe de ser obligatorio').isMongoId(),
 ], (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
@@ -95,7 +91,6 @@ tecnicoRouter.post('/', [
         });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el administrador'

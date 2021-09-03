@@ -33,7 +33,6 @@ servicioRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function
 //Obetner Servicios x2
 servicioRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [servicios, total] = yield Promise.all([
         servicio_model_1.Servicio.find()
             .sort({ _id: -1 })
@@ -110,7 +109,7 @@ servicioRoutes.delete('/:id', (req, res) => {
         });
     });
 });
-//Obetner Usuarios TODOS
+//Exportar
 servicioRoutes.get('/exportar', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const [servicios] = yield Promise.all([
         servicio_model_1.Servicio.find()

@@ -30,7 +30,6 @@ noticiaSchema.pre<INoticia>('save', function( next ) {
     next();
 });
 
-
 interface INoticia extends Document {
     created: Date;
     titulo: string;
@@ -40,6 +39,5 @@ interface INoticia extends Document {
     color: string;
     descripcioncompleta: string;
 }
-
 
 export const Noticia = model<INoticia>('Noticia', noticiaSchema);

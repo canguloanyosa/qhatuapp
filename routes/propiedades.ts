@@ -2,16 +2,10 @@ import { Router, Response, Request } from "express";
 import { verificaToken } from "../middlewares/autenticacion";
 import { Propiedades } from "../models/propiedades.model";
 
-
-
 const propiedadesRoutes = Router();
-
-
 
 propiedadesRoutes.get('/', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    // console.log(desde);
-
     const [ propiedades, total] =  await Promise.all([
                                     Propiedades.find()
                                     .sort({_id: -1})          
@@ -30,19 +24,14 @@ propiedadesRoutes.get('/', async (req: any, res: any) => {
 
 // Crear una  solicitud en la seccion SERVICIOS
 propiedadesRoutes.post('/',  [verificaToken] , (req: any, res: Response) => {
-
     const body = req.body
     body.usuario = req.usuario._id;
-
     Propiedades.create(body).then(async propiedadesDB => {
         await propiedadesDB.populate('usuario').execPopulate();
         res.json({
             ok: true,
             propiedades: propiedadesDB
         });
-   
-
-
     }).catch(err => {
         res.json({
             ok: false,
@@ -50,11 +39,6 @@ propiedadesRoutes.post('/',  [verificaToken] , (req: any, res: Response) => {
         });
     })
 });
-
-
-export default propiedadesRoutes;
-
-
 
 
 //Actualizar Propiedades
@@ -83,8 +67,6 @@ propiedadesRoutes.post('/update/:id', (req: any, res: Response) => {
 });
 
 
-
-
 //Borrar Servicio Recojo de cacao
 propiedadesRoutes.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
@@ -101,6 +83,7 @@ propiedadesRoutes.delete('/:id',    (req: any, res: Response) => {
 });
 
 
+export default propiedadesRoutes;
 
 
 

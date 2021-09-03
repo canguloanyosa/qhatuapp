@@ -1,6 +1,4 @@
-import { Usuario } from "./usuario.model";
 import { Schema, Document, model} from 'mongoose';
-import  bcrypt  from 'bcrypt';
 
 const SedeSchema = new Schema({
     nombre: {
@@ -24,16 +22,12 @@ SedeSchema.method('toJSON', function() {
     return Object;
 })
 
-
 interface ISede extends Document {
     nombre: string;
     img: string;
-    // admin: string;
     direccion: string;
     telefono: string;
     mapa: string;
-    
-
 }
 
 export const Sede = model<ISede>('Sede', SedeSchema);

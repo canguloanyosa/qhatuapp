@@ -3,17 +3,9 @@ import { Socio } from "../models/socio.model";
 import  bcrypt  from 'bcrypt';
 import TokenSocio from "../classes/tokenSocio";
 import { verificaTokenSocio } from "../middlewares/autenticationSocio";
-
 import  nodemailer  from "nodemailer";
 
 const socioRoutes = Router();
-
-
-const { googleVerify } = require('../helpers/google-verify');
-const { generarJWT } = require ('../helpers/jwt'); 
-
-
-
 
 //login
 socioRoutes.post('/login', (req: Request, res: Response) => {
@@ -39,7 +31,6 @@ socioRoutes.post('/login', (req: Request, res: Response) => {
                 departamento: socioDB.departamento,
                 provincia: socioDB.provincia,
                 region: socioDB.region,
-
                 password: req.body.password,
                 password_show: req.body.password_show,
                 
@@ -58,16 +49,8 @@ socioRoutes.post('/login', (req: Request, res: Response) => {
 });
 
 
-
-
-
-
-
-//crear usuario
+//crear tecnico
 socioRoutes.post('/create',(req: Request, res: Response) => {
-
-
-    
     const socio = {
         nombre: req.body.nombre,
         dni: req.body.dni,
@@ -80,16 +63,9 @@ socioRoutes.post('/create',(req: Request, res: Response) => {
         departamento: req.body.departamento,
         provincia: req.body.provincia,
         region: req.body.region,
-
-        
-
     };
 
-   
-
     Socio.create( socio ).then( socioDB => {
-
-
         const tokenSocio = TokenSocio.getJwtToken({
             _id: socioDB._id, 
             nombre: socioDB.nombre,
@@ -106,9 +82,7 @@ socioRoutes.post('/create',(req: Request, res: Response) => {
             ok: true,
             tokenSocio: tokenSocio,
         });
-
         var transporter = nodemailer.createTransport({
-
             host: "smtp.gmail.com",
             port: 465,
             secure: true,
@@ -117,7 +91,6 @@ socioRoutes.post('/create',(req: Request, res: Response) => {
                 pass: "@D3v@tP*"
             }
         });
-    
         var mailOptions = {
             from: "qhatucacao@gmail.com",
             to: socio.email,
@@ -148,14 +121,12 @@ socioRoutes.post('/create',(req: Request, res: Response) => {
 
 //crear precios 
 socioRoutes.post('/recuperar',  (req: any, res: Response ) => {
-
     const body = {
         _id: req.body._id,
         dni: req.body.dni,
         nombre: req.body.nombre,
         userId: req.body.userId,
     }
-
     Socio.create(body).then(socioDB => {
         res.json ({
             ok:true,
@@ -166,23 +137,13 @@ socioRoutes.post('/recuperar',  (req: any, res: Response ) => {
     });
 });
 
-
-
-
-
-
-
-
 //actualizar push 
 socioRoutes.post('/updatepush', verificaTokenSocio , (req: any, res: Response) => {
-
     const socio = {
         push: req.body.push || req.socio.push,
     }
-
     Socio.findByIdAndUpdate(req.socio._id, socio, { new: true}, (err, socioDB) => {
         if(err) throw err;
-
         if(!socioDB){
             return res.json({
                 ok: false,
@@ -201,13 +162,6 @@ socioRoutes.post('/updatepush', verificaTokenSocio , (req: any, res: Response) =
 
 });
 
-
-
-
-
-
-
-
 //actualizar usuario
 socioRoutes.post('/update', verificaTokenSocio , (req: any, res: Response) => {
 
@@ -217,16 +171,7 @@ socioRoutes.post('/update', verificaTokenSocio , (req: any, res: Response) => {
         avatar: req.body.avatar || req.socio.avatar,
         email: req.body.email || req.socio.email,
         celular: req.body.celular || req.socio.celular,
-        // ubicacion: req.body.ubicacion || req.socio.ubicacion,
-        // departamento: req.body.departamento || req.socio.departamento,
-        // provincia: req.body.provincia || req.socio.provincia,
-        // region: req.body.region || req.socio.region,
-
-        // password_show:  req.body.password_show,
-        // password: bcrypt.hashSync(req.body.password_show, 10),
-  
     }
-
 
     Socio.findByIdAndUpdate(req.socio._id, socio, { new: true}, (err, socioDB) => {
         if(err) throw err;
@@ -242,16 +187,8 @@ socioRoutes.post('/update', verificaTokenSocio , (req: any, res: Response) => {
             nombre: socioDB.nombre,
             dni: socioDB.dni,
             avatar: socioDB.avatar,
-
-            // password: userDB.password,
-            // password_show: userDB.password_show,
-
             email: socioDB.email,
             celular: socioDB.celular,
-            // ubicacion: socioDB.ubicacion,
-            // departamento: socioDB.departamento,
-            // provincia: socioDB.provincia,
-            // region: socioDB.region,
         });
         res.json({
             ok: true,
@@ -273,11 +210,6 @@ socioRoutes.post('/updatepass', verificaTokenSocio , (req: any, res: Response) =
         avatar: req.body.avatar || req.socio.avatar,
         email: req.body.email || req.socio.email,
         celular: req.body.celular || req.socio.celular,
-        // ubicacion: req.body.ubicacion || req.socio.ubicacion,
-        // departamento: req.body.departamento || req.socio.departamento,
-        // provincia: req.body.provincia || req.socio.provincia,
-        // region: req.body.region || req.socio.region,
-
         password_show:  req.body.password_show,
         password: bcrypt.hashSync(req.body.password_show, 10),
     }
@@ -299,17 +231,9 @@ socioRoutes.post('/updatepass', verificaTokenSocio , (req: any, res: Response) =
             password_show: socioDB.password_show,
             email: socioDB.email,
             celular: socioDB.celular,
-            // ubicacion: socioDB.ubicacion,
-            // departamento: socioDB.departamento,
-            // provincia: socioDB.provincia,
-            // region: socioDB.region,
         });
 
-
-
-
         var transporter = nodemailer.createTransport({
-
             host: "smtp.gmail.com",
             port: 465,
             secure: true,
@@ -326,8 +250,6 @@ socioRoutes.post('/updatepass', verificaTokenSocio , (req: any, res: Response) =
             html: `<html><head><title>QHATU PARTNER APP 2020</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://admin.amazonastrading.com.pe/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${socio.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${socio.dni} </li> <li>CLAVE:  ${socio.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://admin.amazonastrading.com.pe/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
         }
     
-    
-    
         transporter.sendMail(mailOptions, (error, info) => {
             if(error) {
                 res.status(500).send(error.message);
@@ -341,16 +263,12 @@ socioRoutes.post('/updatepass', verificaTokenSocio , (req: any, res: Response) =
             }
         });
 
-
         res.json({
             ok: true,
             tokenSocio: tokenSocio
         });
     });
 });
-
-
-
 
 
 //Actualizar Contraseña del Socio Seleccionado
@@ -372,7 +290,6 @@ socioRoutes.post('/update_pass/:id', (req: any, res: Response) => {
                 mensaje: 'Invalid data'
             })
         }
-
 
         var transporter = nodemailer.createTransport({
 
@@ -406,8 +323,6 @@ socioRoutes.post('/update_pass/:id', (req: any, res: Response) => {
                 console.log("Email enviado");
             }
         });
-
-
 
         res.json({
             ok: true,

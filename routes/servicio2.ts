@@ -27,22 +27,9 @@ servicio2Routes.get('/', async(req: any, res: Response) => {
 });
 
 
-
-
-
-
-
-
-
-
-
 //Obetner Servicios x2
 servicio2Routes.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    // console.log(desde);
-
-
-
     const [ servicios2, total] =  await Promise.all([
                 Servicio2.find()
                 .sort({_id: -1}) 
@@ -60,27 +47,16 @@ servicio2Routes.get('/obtener', async (req: any, res: any) => {
 });
 
 
-
-
-
 // Crear una  solicitud en la seccion SERVICIOS
 servicio2Routes.post('/',  [verificaToken] , (req: any, res: Response) => {
-
     const body = req.body
     body.usuario = req.usuario._id;
-
-
-    
-
     Servicio2.create(body).then(async servicio2DB => {
         await servicio2DB.populate('usuario').execPopulate();
         res.json({
             ok: true,
             servicio2: servicio2DB
         });
-   
-
-
     }).catch(err => {
         res.json({
             ok: false,
@@ -88,17 +64,6 @@ servicio2Routes.post('/',  [verificaToken] , (req: any, res: Response) => {
         });
     })
 });
-
-
-
-
-
-
-
-
-
-
-
 
 
 //Actualizar Servicio Asistencia Tecnica
@@ -109,10 +74,7 @@ servicio2Routes.post('/update/:id', (req: any, res: Response) => {
         proceso: req.body.proceso,
         completado: req.body.completado,
         observacion: req.body.observacion,
-
-
         start: req.body.start,
-        
     }
     Servicio2.findByIdAndUpdate(id, servicio2, {new: true}, (err, servicio2) => {
         if(err) throw err;
@@ -129,19 +91,11 @@ servicio2Routes.post('/update/:id', (req: any, res: Response) => {
     })
 });
 
-
-
-
-
-
-
 //Borrar Servicio Recojo de cacao
 servicio2Routes.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
-
     Servicio2.findByIdAndRemove(id, (err, servicio2 ) => {
         if(err) throw err;
-
         res.json({
             ok: true,
             mensaje: 'Servicio Asistencia Tecnica Eliminado',
@@ -149,11 +103,6 @@ servicio2Routes.delete('/:id',    (req: any, res: Response) => {
         })
     }); 
 });
-
-
-
-
-
 
 export default servicio2Routes;
 

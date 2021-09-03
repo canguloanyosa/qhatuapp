@@ -25,8 +25,6 @@ versionRoutes.get('/', async (req: any, res: Response ) => {
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 1;
-    //laime
-
     const version = await  Version.find()
                                     .sort({_id: -1})
                                     .skip( skip )
@@ -41,16 +39,9 @@ versionRoutes.get('/', async (req: any, res: Response ) => {
 });
 
 
-
-
-
 //Obetner Servicios x2
 versionRoutes.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    // console.log(desde);
-
-
-
     const [ version, total] =  await Promise.all([
                                     Version.find()
                                     .sort({_id: -1})          
@@ -66,9 +57,5 @@ versionRoutes.get('/obtener', async (req: any, res: any) => {
         id: req.id 
     });
 });
-
-
-
-
 
 export default versionRoutes;

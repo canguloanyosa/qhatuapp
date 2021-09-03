@@ -28,8 +28,5 @@ export default class TokenQR {
         
     }
 
-
-
-    
 }
 

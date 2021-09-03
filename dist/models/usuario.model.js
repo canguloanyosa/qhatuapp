@@ -18,7 +18,6 @@ const usuarioSchema = new mongoose_1.Schema({
     },
     password: {
         type: String,
-        // required: [true, 'La contraseña es necesaria']
     },
     password_show: {
         type: String,

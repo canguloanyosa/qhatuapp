@@ -33,7 +33,6 @@ servicio2Routes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, functio
 //Obetner Servicios x2
 servicio2Routes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [servicios2, total] = yield Promise.all([
         servicio2_model_1.Servicio2.find()
             .sort({ _id: -1 })

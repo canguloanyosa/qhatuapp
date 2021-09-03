@@ -15,7 +15,6 @@ const propiedades_model_1 = require("../models/propiedades.model");
 const propiedadesRoutes = express_1.Router();
 propiedadesRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [propiedades, total] = yield Promise.all([
         propiedades_model_1.Propiedades.find()
             .sort({ _id: -1 })
@@ -48,7 +47,6 @@ propiedadesRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
         });
     });
 });
-exports.default = propiedadesRoutes;
 //Actualizar Propiedades
 propiedadesRoutes.post('/update/:id', (req, res) => {
     const id = req.params.id;
@@ -87,3 +85,4 @@ propiedadesRoutes.delete('/:id', (req, res) => {
         });
     });
 });
+exports.default = propiedadesRoutes;

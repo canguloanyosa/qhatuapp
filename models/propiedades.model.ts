@@ -38,8 +38,6 @@ const propiedadesSchema = new Schema ({
 });
 
 
-
-
 interface IPropiedades extends Document {
     codigo: string;
     altitud: string;

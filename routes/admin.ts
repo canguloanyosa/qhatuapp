@@ -1,34 +1,20 @@
 import { Router, Response, Request, response } from 'express';
 import { check, validationResult } from 'express-validator';
-
-
 const adminRouter = Router();
-
 const { googleVerify } = require('../helpers/google-verify');
-
-
 import { Admin } from "../models/admin.model";
-
 import  bcrypt  from 'bcrypt';
-import { Usuario } from '../models/usuario.model';
 import { getMenuFrontEnd } from '../helpers/menu-frontend';
-
 const { generarJWT } = require ('../helpers/jwt'); 
-
 const { validarJWT } = require('../middlewares/validar-jwt');
-
-
 
 
 //Reiniciar Sesion Administrador
 adminRouter.get('/renew', validarJWT, async (req: any, res= response) => { 
     const id = req.id;
      //Generar el Token -JWT
-     const token = await  generarJWT(id);
-
-
+    const token = await  generarJWT(id);
     const admin = await Admin.findById(id);
-
     res.json({
         ok: true,
         token,
@@ -42,26 +28,14 @@ adminRouter.get('/renew', validarJWT, async (req: any, res= response) => {
 
 //Iniciar Sesion con Google
 adminRouter.post('/login/google',
-    [
-        check('token', 'El token de google es obligatorio').not().isEmpty()
-    ],
+    [ check('token', 'El token de google es obligatorio').not().isEmpty() ],
     async  (req: Request, res = response) => { 
-
-
     const googleToken = req.body.token;
-
-
-    
     try {
-
         await googleVerify(googleToken);
-
         const { name, email, picture } = await googleVerify(googleToken);
-
         const adminDB = await Admin.findOne({ email });
-        
         let admin;
-
         if(!adminDB) {
             // si no existe el usuario
             admin = new Admin({
@@ -87,9 +61,6 @@ adminRouter.post('/login/google',
 
         res.json({
             ok: true,
-            // msg: 'Google Signin',
-            // name, email, picture ,
-            // googleToken
             token
         })
     
@@ -100,7 +71,6 @@ adminRouter.post('/login/google',
             msg: 'Token no es correcto'
         })
     }
-
 });
 
 
@@ -114,12 +84,8 @@ adminRouter.post('/login',
         check('password', 'El password es obligatorio').not().isEmpty()
     ],
     async  (req: Request, res = response) => { 
-
-
     const { email, password} = req.body;
-
     try { 
-
         //Verificar email
         const adminDB = await Admin.findOne({ email });
         if( !adminDB) {
@@ -128,7 +94,6 @@ adminRouter.post('/login',
                 msg: 'Email no valida'
             });
         }
-
         //Verificar contraseña
         const validPassword = bcrypt.compareSync( password, adminDB.password);  
 
@@ -138,20 +103,12 @@ adminRouter.post('/login',
                 msg: 'Contraseña no valida'
             });
         }
-
         //Generar el Token -JWT
         const token = await  generarJWT(adminDB.id);
-
-
-
         res.json({
             ok: true,
-            // msg: 'Hola Laime esto es LOGIN'
             token,
             menu: getMenuFrontEnd(adminDB.role)
-        
-
-
         })
 
     }catch(error){
@@ -168,45 +125,25 @@ adminRouter.post('/login',
 
 //Obetner Administradores
 adminRouter.get('/', validarJWT, async (req: any, res: any) => {
-
-
     const desde =  Number(req.query.desde) || 0;
     console.log(desde);
-
-    // const admin = await Admin.find({}, 'nombre email role google')
-    //                                 .skip( desde )
-    //                                 .limit( 5 );
-
-    // const total = await Admin.countDocuments();   
-    
     const [ admin, total] =  await Promise.all([
         Admin.find({})
         // Admin.find({}, 'nombre email role  sedeATP google password')
-
                                     .skip( desde )
                                     .sort({_id: -1}) 
                                     .limit( 5 ),
 
                                     Admin.countDocuments()
     ]);
-
     res.json({
         ok: true,
         admin,
         total,
         id: req.id 
     });
-
-
-
     
 });
-
-
-
-
-
-
 
 
 
@@ -265,13 +202,8 @@ adminRouter.put('/:id',
 
 //BorrarAdministrador
 adminRouter.delete('/:id',  async  (req: Request, res = response) => { 
-
-
         const id = req.params.id;
-
         try {
-
-
             const adminDB = await Admin.findById( id );
             if(!adminDB){
                 return res.status(404).json({
@@ -280,12 +212,9 @@ adminRouter.delete('/:id',  async  (req: Request, res = response) => {
                 });
             }
 
-
             await Admin.findByIdAndDelete(id);
-
             res.json({
                 ok: true,
-                // id
                 msg: 'Administrador eliminado.'
             });
 
@@ -296,16 +225,7 @@ adminRouter.delete('/:id',  async  (req: Request, res = response) => {
                 msg: 'Hable con el administrador'
             });
         }
-
-
-
 });
-
-
-
-
-
-
 
 
 
@@ -313,34 +233,19 @@ adminRouter.delete('/:id',  async  (req: Request, res = response) => {
 adminRouter.post('/', 
     [
         check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-        // check('password', 'El password es obligatorio').not().isEmpty(),
         check('email',  'El email es obligatorio').isEmail(),
     ],
     async  (req: Request, res = response) => {
-
     console.log(req.body);
-
-
-
     const { email, password, password_show } = req.body;
-
-
-
-
-
-    
-
     const errores = validationResult(req);
-
     if( !errores.isEmpty() ) {
         return res.status(400).json({
             ok: false,
             errors: errores.mapped()
         });
     }
-
     try {
-
         const exiteEmail = await Admin.findOne({ email });
         if(exiteEmail) {
             return res.status(400).json({
@@ -348,42 +253,20 @@ adminRouter.post('/',
                 msg: 'El correo ya esta registrado'
             });
         }
-
         const admin = new Admin(req.body);
-
-
-        // Encriptar Contraseña
-
         const salt = bcrypt.genSaltSync();
-
-
         admin.password_show =  req.body.password_show,
-        
         admin.password = bcrypt.hashSync(req.body.password_show, 10),
-
-
-        // admin.password = bcrypt.hashSync(password, salt);
-        
-
-        
-
-
         // Guardar Contraseña
         await admin.save();
-
-
         //Generar el Token -JWT
         const token = await  generarJWT(admin.id);
-
-
         res.json({
             ok: true,
             admin,
             token,
             menu: getMenuFrontEnd(admin.role)
-
         });
-
     } catch (error){
         console.log(error);
         res.status(500).json({
@@ -391,16 +274,7 @@ adminRouter.post('/',
             msg: 'Error inesperado... revisar logs'
         });
     }
-
-
-    
-
 });
-
-
-
-
-
 
 
 //Actualizar Contraseña del ADMINISTRADOR Seleccionado
@@ -423,7 +297,6 @@ adminRouter.post('/update_pass/:id', (req: any, res: Response) => {
                 mensaje: 'Invalid data'
             })
         }
-
         res.json({
             ok: true,
             msg: 'Contraseña actualizada correctamente',
@@ -432,8 +305,6 @@ adminRouter.post('/update_pass/:id', (req: any, res: Response) => {
         });admin
     })
 });
-
-
 
 
 module.exports =  adminRouter;

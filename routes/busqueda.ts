@@ -1,6 +1,4 @@
-import { Router, Response, Request, response } from 'express';
-import { check, validationResult } from 'express-validator';
-
+import { Router } from 'express';
 const { validarJWT } = require('../middlewares/validar-jwt');
 import { Tecnico } from "../models/tecnico.model";
 import { Sede } from "../models/sede.model";
@@ -11,10 +9,7 @@ import { Compra } from '../models/compra.model';
 import { Servicio } from '../models/servicio.model';
 import { Servicio2 } from '../models/servicio2.model';
 
-
 const busquedaRouter = Router();
-
-
 
 //Buscar Todo
 busquedaRouter.get('/:busqueda', validarJWT, async (req: any, res: any) => {
@@ -43,12 +38,9 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
 
     const tabla = req.params.tabla;
     const busqueda = req.params.busqueda;
-    // const regex = new RegExp( busqueda, 'i');
     const regex = new RegExp( busqueda);
 
-
     let data = [];
-
 
     switch (tabla) {
         case 'tecnico':
@@ -138,7 +130,5 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
         resultados: data
     }) 
 });
-
-
 
 module.exports =  busquedaRouter;

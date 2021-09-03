@@ -1,9 +1,7 @@
 import { NextFunction, response } from "express";
 const jwt = require('jsonwebtoken');
 
-
 const validarJWT = (req: any, res = response, next:NextFunction) => {
-
     //Leer el token{}
     const token = req.header('x-token');
     if( !token) {
@@ -13,9 +11,7 @@ const validarJWT = (req: any, res = response, next:NextFunction) => {
         });
     }
 
-
     try {
-
         const { id } = jwt.verify( token, 'codigo-token-fake'   );
         req.id = id;
         next();

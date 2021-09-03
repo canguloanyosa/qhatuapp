@@ -1,6 +1,4 @@
 import { Schema, Document, model} from 'mongoose';
-
-
 var mongoose = require('mongoose');  // 1. require mongoose
 var autoIncrement = require('mongoose-auto-increment');
 
@@ -114,10 +112,7 @@ interface ICompra extends Document {
     farmerid: string;
     precioold: string;
 }
-//FF
-
 
 autoIncrement.initialize(mongoose.connection); // 3. initialize autoIncrement 
 compraSchema.plugin(autoIncrement.plugin, 'Compra'); 
-
 export const Compra = model<ICompra>('Compra', compraSchema);

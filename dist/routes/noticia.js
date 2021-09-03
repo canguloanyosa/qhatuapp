@@ -35,7 +35,6 @@ noticiaRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, fu
     const [noticias, total] = yield Promise.all([
         noticia_model_1.Noticia.find()
             .sort({ _id: -1 })
-            // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
             .limit(5),
         noticia_model_1.Noticia.countDocuments()

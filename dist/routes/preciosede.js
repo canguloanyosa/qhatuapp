@@ -40,11 +40,9 @@ preciosedeRoutes.post('/create', (req, res) => {
 //Obetner 30 precios por sede
 preciosedeRoutes.get('/30', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    console.log(desde);
     const [preciosede, total] = yield Promise.all([
         preciosede_model_1.PrecioSede.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede')
             .sort({ _id: -1 })
-            // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
             .limit(30),
         preciosede_model_1.PrecioSede.countDocuments()
@@ -59,7 +57,6 @@ preciosedeRoutes.get('/30', (req, res) => __awaiter(void 0, void 0, void 0, func
 //Obetner precios por sede x2
 preciosedeRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    console.log(desde);
     const [preciosede, total] = yield Promise.all([
         preciosede_model_1.PrecioSede.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede')
             .sort({ _id: -1 })

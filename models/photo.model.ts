@@ -4,21 +4,19 @@ const schema = new Schema({
     created: {
         type: Date
     },
-    // title: {
-    //     type: String
-    // },
-    // description: {
-    //     type: String
-    // },
     imagePath: {
         type: String
     }
 });
 
 
+schema.pre<IPhoto>('save', function( next ) {
+    this.created = new Date();
+    next();
+});
+
+
 interface IPhoto extends Document {
-    // title: string;
-    // description: string;
     created: Date;
     imagePath: string;
 }

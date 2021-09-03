@@ -24,7 +24,6 @@ const VersionSchema = new Schema({
     fecha: {
         type: Date
     }
-    
 },   { collection: 'version' } );
 
 

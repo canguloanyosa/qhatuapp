@@ -19,8 +19,6 @@ const tokenSocio_1 = __importDefault(require("../classes/tokenSocio"));
 const autenticationSocio_1 = require("../middlewares/autenticationSocio");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const socioRoutes = express_1.Router();
-const { googleVerify } = require('../helpers/google-verify');
-const { generarJWT } = require('../helpers/jwt');
 //login
 socioRoutes.post('/login', (req, res) => {
     const body = req.body;
@@ -61,7 +59,7 @@ socioRoutes.post('/login', (req, res) => {
         }
     });
 });
-//crear usuario
+//crear tecnico
 socioRoutes.post('/create', (req, res) => {
     const socio = {
         nombre: req.body.nombre,
@@ -175,12 +173,6 @@ socioRoutes.post('/update', autenticationSocio_1.verificaTokenSocio, (req, res) 
         avatar: req.body.avatar || req.socio.avatar,
         email: req.body.email || req.socio.email,
         celular: req.body.celular || req.socio.celular,
-        // ubicacion: req.body.ubicacion || req.socio.ubicacion,
-        // departamento: req.body.departamento || req.socio.departamento,
-        // provincia: req.body.provincia || req.socio.provincia,
-        // region: req.body.region || req.socio.region,
-        // password_show:  req.body.password_show,
-        // password: bcrypt.hashSync(req.body.password_show, 10),
     };
     socio_model_1.Socio.findByIdAndUpdate(req.socio._id, socio, { new: true }, (err, socioDB) => {
         if (err)
@@ -196,14 +188,8 @@ socioRoutes.post('/update', autenticationSocio_1.verificaTokenSocio, (req, res) 
             nombre: socioDB.nombre,
             dni: socioDB.dni,
             avatar: socioDB.avatar,
-            // password: userDB.password,
-            // password_show: userDB.password_show,
             email: socioDB.email,
             celular: socioDB.celular,
-            // ubicacion: socioDB.ubicacion,
-            // departamento: socioDB.departamento,
-            // provincia: socioDB.provincia,
-            // region: socioDB.region,
         });
         res.json({
             ok: true,
@@ -219,10 +205,6 @@ socioRoutes.post('/updatepass', autenticationSocio_1.verificaTokenSocio, (req, r
         avatar: req.body.avatar || req.socio.avatar,
         email: req.body.email || req.socio.email,
         celular: req.body.celular || req.socio.celular,
-        // ubicacion: req.body.ubicacion || req.socio.ubicacion,
-        // departamento: req.body.departamento || req.socio.departamento,
-        // provincia: req.body.provincia || req.socio.provincia,
-        // region: req.body.region || req.socio.region,
         password_show: req.body.password_show,
         password: bcrypt_1.default.hashSync(req.body.password_show, 10),
     };
@@ -244,10 +226,6 @@ socioRoutes.post('/updatepass', autenticationSocio_1.verificaTokenSocio, (req, r
             password_show: socioDB.password_show,
             email: socioDB.email,
             celular: socioDB.celular,
-            // ubicacion: socioDB.ubicacion,
-            // departamento: socioDB.departamento,
-            // provincia: socioDB.provincia,
-            // region: socioDB.region,
         });
         var transporter = nodemailer_1.default.createTransport({
             host: "smtp.gmail.com",

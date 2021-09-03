@@ -4,26 +4,17 @@ import { Servicio } from "../models/servicio.model";
 
 const servicioRoutes = Router();
 
-
-
-
-
-
-
 //Obtener Servicios Paginados
 servicioRoutes.get('/', async(req: any, res: Response) => {
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina -1;
     skip = skip * 10;
-
     const servicios = await Servicio.find()
     .sort({_id: -1})
     .skip(skip)
     .limit(10)
     .populate('usuario','-password')
     .exec();
-
-
     res.json({
         ok: true,
         pagina,
@@ -31,18 +22,9 @@ servicioRoutes.get('/', async(req: any, res: Response) => {
     });
 });
 
-
-
-
-
-
 //Obetner Servicios x2
 servicioRoutes.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    // console.log(desde);
-
-
-
     const [ servicios, total] =  await Promise.all([
                                     Servicio.find()
                                     .sort({_id: -1})          
@@ -59,27 +41,16 @@ servicioRoutes.get('/obtener', async (req: any, res: any) => {
     });
 });
 
-
-
-
-
-
-
 // Crear una  solicitud en la seccion SERVICIOS
 servicioRoutes.post('/',  [verificaToken] , (req: any, res: Response) => {
-
     const body = req.body
     body.usuario = req.usuario._id;
-
     Servicio.create(body).then(async servicioDB => {
         await servicioDB.populate('usuario').execPopulate();
         res.json({
             ok: true,
             servicios: servicioDB
         });
-   
-
-
     }).catch(err => {
         res.json({
             ok: false,
@@ -87,11 +58,6 @@ servicioRoutes.post('/',  [verificaToken] , (req: any, res: Response) => {
         });
     })
 });
-
-
-
-
-
 
 //Actualizar Servicio Recojo de Cacao
 servicioRoutes.post('/update/:id', (req: any, res: Response) => {
@@ -124,15 +90,11 @@ servicioRoutes.post('/update/:id', (req: any, res: Response) => {
     })
 });
 
-
-
 //Borrar Servicio Recojo de cacao
 servicioRoutes.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
-
     Servicio.findByIdAndRemove(id, (err, servicios ) => {
         if(err) throw err;
-
         res.json({
             ok: true,
             mensaje: 'Mensaje Eliminado',
@@ -141,11 +103,7 @@ servicioRoutes.delete('/:id',    (req: any, res: Response) => {
     }); 
 });
 
-
-
-
-
-//Obetner Usuarios TODOS
+//Exportar
 servicioRoutes.get('/exportar', async (req: any, res: any) => {
     const [ servicios ] =  await Promise.all([
                                     Servicio.find()
@@ -156,12 +114,6 @@ servicioRoutes.get('/exportar', async (req: any, res: any) => {
         servicios,
     });
 });
-
-
-
-
-
-
 
 export default servicioRoutes;
 

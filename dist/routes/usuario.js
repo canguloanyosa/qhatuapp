@@ -108,98 +108,6 @@ userRoutes.post('/qr', (req, res) => {
         }
     });
 });
-//Iniciar Sesion con Facebo
-userRoutes.post('/login/createFb', (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = {
-        nombre: req.body.nombre,
-        avatar: req.body.avatar,
-        email: req.body.email,
-        idFb: req.body.idFb,
-        dni: req.body.dni,
-        password: req.body.password
-    };
-    usuario_model_1.Usuario.create(user).then(userDB => {
-        const tokenUser = token_1.default.getJwtToken({
-            _id: userDB._id,
-            nombre: userDB.nombre,
-            avatar: userDB.avatar,
-            email: userDB.email,
-            // idFb: userDB.idFb,
-            dni: userDB.dni,
-            password: userDB.password
-        });
-        res.json({
-            ok: true,
-            user,
-            token: tokenUser
-        });
-    }).catch(err => {
-        res.json({
-            ok: false,
-            err
-        });
-    });
-}));
-//Iniciar Sesion con Google
-userRoutes.post('/login/google', (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = {
-        nombre: req.body.nombre,
-        dni: req.body.dni,
-        email: req.body.email,
-        perfil: req.body.perfil,
-        password: req.body.password,
-        idGoogle: req.body.idGoogle,
-    };
-    try {
-        const { nombre, email, dni, perfil, password, idGoogle } = yield user;
-        const userDB = yield usuario_model_1.Usuario.findOne({ idGoogle });
-        let usuario;
-        if (!userDB) {
-            usuario = new usuario_model_1.Usuario({
-                nombre: nombre,
-                dni: dni,
-                email: email,
-                perfil: perfil,
-                password: '@@@',
-                idGoogle: idGoogle,
-                google: true,
-            });
-        }
-        else {
-            //existe usuario
-            usuario = userDB;
-            // usuario.google = true
-        }
-        // Guardar en Base de datos
-        yield usuario.save();
-        const tokenUser = token_1.default.getJwtToken({
-            _id: usuario._id,
-            nombre: usuario.nombre,
-            dni: usuario.dni,
-            avatar: usuario.avatar,
-            email: usuario.email,
-            celular: usuario.celular,
-            ubicacion: usuario.ubicacion,
-            departamento: usuario.departamento,
-            provincia: usuario.provincia,
-            region: usuario.region,
-            password: req.body.password,
-            password_show: req.body.password_show,
-        });
-        res.json({
-            ok: true,
-            msg: 'Google Login',
-            user,
-            token: tokenUser
-        });
-    }
-    catch (_a) {
-        res.status(401).json({
-            ok: false,
-            msg: 'Ups Error'
-        });
-    }
-}));
 //crear usuario
 userRoutes.post('/create', (req, res) => {
     const user = {
@@ -212,10 +120,6 @@ userRoutes.post('/create', (req, res) => {
         celular: req.body.celular,
         sede: req.body.sede,
         farmerid: req.body.farmerid,
-        // ubicacion: req.body.ubicacion,
-        // departamento: req.body.departamento,
-        // provincia: req.body.provincia,
-        // region: req.body.region,
     };
     usuario_model_1.Usuario.create(user).then(userDB => {
         const tokenUser = token_1.default.getJwtToken({
@@ -227,9 +131,6 @@ userRoutes.post('/create', (req, res) => {
             celular: userDB.celular,
             farmerid: userDB.farmerid,
             sede: userDB.sede,
-            // departamento: userDB.departamento,
-            // provincia: userDB.provincia,
-            // region: userDB.region,
         });
         res.json({
             ok: true,
@@ -269,7 +170,7 @@ userRoutes.post('/create', (req, res) => {
         });
     });
 });
-//crear precios 
+//recuperar 
 userRoutes.post('/recuperar', (req, res) => {
     const body = {
         dni: req.body.dni,
@@ -298,8 +199,6 @@ userRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
         provincia: req.body.provincia || req.usuario.provincia,
         region: req.body.region || req.usuario.region,
         photo: req.body.photo || req.usuario.photo,
-        // password_show:  req.body.password_show,
-        // password: bcrypt.hashSync(req.body.password_show, 10),
     };
     usuario_model_1.Usuario.findByIdAndUpdate(req.usuario._id, user, { new: true }, (err, userDB) => {
         if (err)
@@ -404,7 +303,7 @@ userRoutes.post('/updatepass', autenticacion_1.verificaToken, (req, res) => {
             from: "qhatucacao@gmail.com",
             to: user.email,
             subject: "ACTUALIZACION DE CONTRASEÑA QHATU CACAO APP",
-            html: `<html><head><title>QHATU CACAO APP 2020</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://admin.amazonastrading.com.pe/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${user.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${user.dni} </li> <li>CLAVE:  ${user.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://admin.amazonastrading.com.pe/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
+            html: `<html><head><title>QHATU CACAO APP 2021</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://amazonastrading.com.pe/recursos/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${user.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${user.dni} </li> <li>CLAVE:  ${user.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://amazonastrading.com.pe/recursos/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -456,7 +355,7 @@ userRoutes.post('/update_pass/:id', (req, res) => {
             from: "qhatucacao@gmail.com",
             to: usuario.email,
             subject: "ACCESOS QHATU CACAO APP - IMPORTANTE",
-            html: `<html><head><title>DINDON APP</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://deliverydindon.com/assets/img/landing/mapa.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>BIENVENIDO Chamo, tu registro fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos son los siguientes: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>USUARIO: dindon@gmail.com </li> <li>CLAVE:  *&$#*_% </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://admin.amazonastrading.com.pe/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
+            html: `<html><head><title>QHATU CACAO APP 2021</title></head><body><table style='max-width: 600px; padding: 10px; margin:0 auto; border-collapse: collapse;'><tr><td style='padding: 0'><center><img style='padding: 0; display: block; margin-bottom: -10px' src='https://amazonastrading.com.pe/recursos/resources/images/icono-app.png' width='20%'> <br> <br> </center></td></tr><tr><td style='background-color: #ecf0f1'><div style='color: #34495e; margin: 4% 10% 2%; text-align: justify;font-family: sans-serif'><h2 style='color: #e67e22; margin: 0 0 7px'>HOLA ${usuario.nombre} tu cambio de contraseña fue un exito.</h2><p style='margin: 2px; font-size: 15px'> Tus accesos para la plataforma móvil son: </p><ul style='font-size: 15px; margin: 10px 0'>  <br>  <li>DNI: ${usuario.dni} </li> <li>CLAVE:  ${usuario.password_show} </li></ul> <br><div style='width: 100%; text-align: center'> <a href='https://play.google.com/store/apps/details?id=com.amazonastrading.app' target='_blank'> <img src='https://amazonastrading.com.pe/recursos/resources/images/disponible-en-google-play-badge.png'  width='30%'> </a></div><p style='color: #b3b3b3; font-size: 12px; text-align: center;margin: 30px 0 0'>Amazonas Trading Perú SAC</p></div></td></tr></table></body></html>`
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {

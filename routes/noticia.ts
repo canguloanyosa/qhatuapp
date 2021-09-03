@@ -1,20 +1,12 @@
 import { Router, Response, Request } from 'express';
 import { Noticia } from "../models/noticia.model";
-import { verificaToken } from "../middlewares/autenticacion";
-
-
 
 const noticiaRoutes = Router();
 
-
 noticiaRoutes.get('/', async(req: any, res: Response) => {
-    
-
     let pagina = Number(req.query.pagina)  || 1;
     let skip =   pagina - 1;
     skip = skip * 10;
-
-
     const noticias = await Noticia.find()
                                 .sort({_id: -1})
                                 .skip(skip)
@@ -28,9 +20,6 @@ noticiaRoutes.get('/', async(req: any, res: Response) => {
     });
 });
 
-
-
-
 //Obetner Usuarios x2
 noticiaRoutes.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
@@ -39,7 +28,6 @@ noticiaRoutes.get('/obtener', async (req: any, res: any) => {
     const [ noticias, total] =  await Promise.all([
                                     Noticia.find()
                                     .sort({_id: -1})          
-                                    // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
                                     .limit( 5 ),
                                     Noticia.countDocuments()
@@ -54,21 +42,10 @@ noticiaRoutes.get('/obtener', async (req: any, res: any) => {
 
 
 
-
-
-
-
-
-
 //Crear POST
 noticiaRoutes.post('/', (req: any, res: Response)=> {
-       
     const body = req.body;
     body.usuario = req.usuario._id;
-
-
-
-
     Noticia.create(body).then(async noticiaDB => {
         await noticiaDB.populate('usuario').execPopulate();
         res.json({
@@ -81,12 +58,6 @@ noticiaRoutes.post('/', (req: any, res: Response)=> {
 } );
 
 
-
-
-
-
-
-
 // Crear un sipo de solicitud en la seccion NOTICIAS
 noticiaRoutes.post('/create', (req: Request, res: Response) => {
     const noticia = {
@@ -94,16 +65,12 @@ noticiaRoutes.post('/create', (req: Request, res: Response) => {
         descripcion: req.body.descripcion,
         portada: req.body.portada,
         tipo:  req.body.tipo,
-
     }
-
     Noticia.create( noticia).then( noticiaDB => {
         res.json({
             ok: true,
             servicio: noticiaDB
         });
-
-
     }).catch(err => {
         res.json({
             ok: false,
@@ -111,7 +78,6 @@ noticiaRoutes.post('/create', (req: Request, res: Response) => {
         });
     })
 });
-
 
 
 
@@ -142,15 +108,11 @@ noticiaRoutes.post('/update/:id', (req: any, res: Response) => {
 
 
 
-
-
 // Borrar Noticia 
 noticiaRoutes.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
-
     Noticia.findByIdAndRemove(id, (err, noticia ) => {
         if(err) throw err;
-
         res.json({
             ok: true,
             mensaje: 'Noticia Eliminada',
@@ -158,8 +120,6 @@ noticiaRoutes.delete('/:id',    (req: any, res: Response) => {
         })
     }); 
 });
-
-
 
 
 export default noticiaRoutes;

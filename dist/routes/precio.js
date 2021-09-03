@@ -46,7 +46,6 @@ precioRoutes.get('/historial', (req, res) => __awaiter(void 0, void 0, void 0, f
 //Obetner precios x2
 precioRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    console.log(desde);
     const [precios, total] = yield Promise.all([
         precios_model_1.Precio.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede')
             .sort({ _id: -1 })

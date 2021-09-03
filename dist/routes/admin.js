@@ -46,9 +46,7 @@ adminRouter.get('/renew', validarJWT, (req, res = express_1.response) => __await
     });
 }));
 //Iniciar Sesion con Google
-adminRouter.post('/login/google', [
-    express_validator_1.check('token', 'El token de google es obligatorio').not().isEmpty()
-], (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
+adminRouter.post('/login/google', [express_validator_1.check('token', 'El token de google es obligatorio').not().isEmpty()], (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const googleToken = req.body.token;
     try {
         yield googleVerify(googleToken);
@@ -77,9 +75,6 @@ adminRouter.post('/login/google', [
         const token = yield generarJWT(admin.id);
         res.json({
             ok: true,
-            // msg: 'Google Signin',
-            // name, email, picture ,
-            // googleToken
             token
         });
     }
@@ -117,7 +112,6 @@ adminRouter.post('/login', [
         const token = yield generarJWT(adminDB.id);
         res.json({
             ok: true,
-            // msg: 'Hola Laime esto es LOGIN'
             token,
             menu: menu_frontend_1.getMenuFrontEnd(adminDB.role)
         });
@@ -134,10 +128,6 @@ adminRouter.post('/login', [
 adminRouter.get('/', validarJWT, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
     console.log(desde);
-    // const admin = await Admin.find({}, 'nombre email role google')
-    //                                 .skip( desde )
-    //                                 .limit( 5 );
-    // const total = await Admin.countDocuments();   
     const [admin, total] = yield Promise.all([
         admin_model_1.Admin.find({})
             // Admin.find({}, 'nombre email role  sedeATP google password')
@@ -209,7 +199,6 @@ adminRouter.delete('/:id', (req, res = express_1.response) => __awaiter(void 0, 
         yield admin_model_1.Admin.findByIdAndDelete(id);
         res.json({
             ok: true,
-            // id
             msg: 'Administrador eliminado.'
         });
     }
@@ -224,7 +213,6 @@ adminRouter.delete('/:id', (req, res = express_1.response) => __awaiter(void 0, 
 //Crear Administradores
 adminRouter.post('/', [
     express_validator_1.check('nombre', 'El nombre es obligatorio').not().isEmpty(),
-    // check('password', 'El password es obligatorio').not().isEmpty(),
     express_validator_1.check('email', 'El email es obligatorio').isEmail(),
 ], (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
@@ -245,11 +233,9 @@ adminRouter.post('/', [
             });
         }
         const admin = new admin_model_1.Admin(req.body);
-        // Encriptar Contraseña
         const salt = bcrypt_1.default.genSaltSync();
         admin.password_show = req.body.password_show,
             admin.password = bcrypt_1.default.hashSync(req.body.password_show, 10),
-            // admin.password = bcrypt.hashSync(password, salt);
             // Guardar Contraseña
             yield admin.save();
         //Generar el Token -JWT

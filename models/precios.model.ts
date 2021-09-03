@@ -1,7 +1,6 @@
 import { Schema, Document ,model } from 'mongoose';
 
 const precioSchema = new Schema ({
-
     created: {
         type: Date
     },
@@ -35,9 +34,6 @@ const precioSchema = new Schema ({
         type: String,
         default: 'General'
     }
-
-
-
 });
 
 precioSchema.pre<IPrecio>('save', function( next ) {

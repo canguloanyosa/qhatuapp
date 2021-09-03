@@ -2,8 +2,6 @@ import {Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 var mongoose = require('mongoose');  // 1. require mongoose
 
-
-
 const usuarioSchema = new Schema({
 
     nombre: {
@@ -16,7 +14,6 @@ const usuarioSchema = new Schema({
     },
     password: {
         type: String,
-        // required: [true, 'La contraseña es necesaria']
     },
     password_show: {
         type: String,
@@ -104,7 +101,5 @@ interface IUsuario extends Document {
     photo: string;
     compararPassword(password: string): boolean;
 }
-
-
 
 export const Usuario = model<IUsuario>('Usuario', usuarioSchema);

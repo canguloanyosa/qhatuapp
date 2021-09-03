@@ -9,18 +9,13 @@ import  nodemailer  from "nodemailer";
 
 // Crear recuperacion
 recuperarRoutes.post('/',  (req: any, res: Response) => {
-
     const body = req.body
-
     Recuperar.create(body).then(async recuperarDB => {
         await recuperarDB.populate('usuario').execPopulate();
         res.json({
             ok: true,
             recuperar: recuperarDB
         });
-   
-
-
     }).catch(err => {
         res.json({
             ok: false,
@@ -36,14 +31,9 @@ recuperarRoutes.post('/',  (req: any, res: Response) => {
 //Obetner Servicios x2
 recuperarRoutes.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    // console.log(desde);
-
-
-
     const [ recuperar, total] =  await Promise.all([
                                     Recuperar.find()
                                     .sort({_id: -1})          
-                                    // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
                                     .limit( 5 ),
                                     Recuperar.countDocuments()
@@ -63,10 +53,8 @@ recuperarRoutes.get('/obtener', async (req: any, res: any) => {
 //Borrar Servicio Recojo de cacao
 recuperarRoutes.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
-
     Recuperar.findByIdAndRemove(id, (err, recuperar ) => {
         if(err) throw err;
-
         res.json({
             ok: true,
             mensaje: 'Mensaje Eliminado',
@@ -77,9 +65,7 @@ recuperarRoutes.delete('/:id',    (req: any, res: Response) => {
 
 
 
-
-
-//Actualizar Servicio Asistencia Tecnica
+//Actualizar 
 recuperarRoutes.post('/update/:id', (req: any, res: Response) => {
     const id=req.params.id;
     const recuperar = {
@@ -103,11 +89,7 @@ recuperarRoutes.post('/update/:id', (req: any, res: Response) => {
             recuperar
         });
 
-
-
-
         var transporter = nodemailer.createTransport({
-
             host: "smtp.gmail.com",
             port: 465,
             secure: true,
@@ -134,9 +116,6 @@ recuperarRoutes.post('/update/:id', (req: any, res: Response) => {
                 console.log("Email enviado");
             }
         });
-
-
-
     })
 });
 

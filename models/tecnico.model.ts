@@ -1,6 +1,4 @@
-import { Usuario } from "./usuario.model";
 import { Schema, Document, model} from 'mongoose';
-import  bcrypt  from 'bcrypt';
 
 const TecnicoSchema = new Schema({
     nombre: {
@@ -22,12 +20,10 @@ const TecnicoSchema = new Schema({
     },
 });
 
-
 TecnicoSchema.method('toJSON', function() {
     const {__v, ...Object } = this.toObject();
     return Object;
 })
-
 
 interface ITecnico extends Document {
     nombre: string;

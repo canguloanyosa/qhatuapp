@@ -1,5 +1,4 @@
 import { Schema, Document, model} from 'mongoose';
-import  bcrypt  from 'bcrypt';
 
 const NotificacionSchema = new Schema({
     created: {
@@ -35,13 +34,10 @@ NotificacionSchema.method('toJSON', function() {
     return Object;
 })
 
-
 NotificacionSchema.pre<INotificacion>('save', function( next ) {
     this.created = new Date();
     next();
 });
-
-
 
 interface INotificacion extends Document {
     created: Date;
@@ -51,7 +47,6 @@ interface INotificacion extends Document {
     url: string;
     userId: string;
     pushId: string;
-
 }
 
 export const Notificacion = model<INotificacion>('Notificacion', NotificacionSchema);

@@ -3,18 +3,13 @@ import { verificaToken } from "../middlewares/autenticacion";
 import { Router, Response, Request } from "express";
 import { Precio } from "../models/precios.model";
 
-
 const precioRoutes = Router();
-
-
 
 // obtener el ultimo precio
 precioRoutes.get('/', async (req: any, res: Response ) => {
-
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 1;
-
     const precios = await  Precio.find()
                                     .sort({_id: -1})
                                     .skip( skip )
@@ -25,19 +20,14 @@ precioRoutes.get('/', async (req: any, res: Response ) => {
         pagina,
         precios
     });
-    
 });
-
-
 
 
 // obtener el ultimo precio
 precioRoutes.get('/historial', async (req: any, res: Response ) => {
-
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 1;
-
     const precios = await  Precio.find({}, '-_id created humedo1 seco1 humedo2')
                                     .sort({_id: -1})
                                     .skip( skip )
@@ -49,19 +39,9 @@ precioRoutes.get('/historial', async (req: any, res: Response ) => {
 
 });
 
-
-
-
-
-
-
-
-
 //Obetner precios x2
 precioRoutes.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    console.log(desde);
-
     const [ precios, total] =  await Promise.all([
                                     Precio.find({}, '_id created comentario humedo1 seco1 humedo2 humedo3 seco3 sede')
                                     .sort({_id: -1})          
@@ -77,8 +57,6 @@ precioRoutes.get('/obtener', async (req: any, res: any) => {
         id: req.id 
     });
 });
-
-
 
 
 //Obetner Usuarios x2  nuevo
@@ -103,8 +81,6 @@ precioRoutes.get('/30', async (req: any, res: any) => {
 });
 
 
-
-
 //Obetner 10 precios
 precioRoutes.get('/10', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
@@ -127,14 +103,6 @@ precioRoutes.get('/10', async (req: any, res: any) => {
 });
 
 
-
-
-
-
-
-
-
-
 //crear precios 
 precioRoutes.post('/', [verificaToken], (req: any, res: Response ) => {
     const body = req.body;
@@ -147,9 +115,6 @@ precioRoutes.post('/', [verificaToken], (req: any, res: Response ) => {
         res.json(err)
     });
 });
-
-
-
 
 
 // Crear un sipo de solicitud en la seccion SERVICIOS
@@ -181,9 +146,6 @@ precioRoutes.post('/create', (req: Request, res: Response) => {
         });
     })
 });
-
-
-
 
 
 //Borrar precio

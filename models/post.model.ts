@@ -1,8 +1,6 @@
 import { Schema, Document, model} from 'mongoose';
 
-
 const postSchema = new Schema ({
-
     created: {
         type: Date
     },
@@ -24,8 +22,6 @@ const postSchema = new Schema ({
         type: String,
         default: '[]'
     }
-
-
 });
 
 postSchema.pre<IPost>('save', function( next ) {

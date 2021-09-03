@@ -44,7 +44,7 @@ postRoutes.post('/', [autenticacion_1.verificaToken], (req, res) => {
         res.json(err);
     });
 });
-// Agregar comentario
+// Agregar respuestas
 postRoutes.post('/update/:id', (req, res) => {
     const id = req.params.id;
     const post = {

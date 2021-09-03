@@ -14,43 +14,6 @@ const compra_model_1 = require("../models/compra.model");
 const autenticationSocio_1 = require("../middlewares/autenticationSocio");
 const webpush = require('web-push');
 const compraRoutes = express_1.Router();
-const vapiKeys = {
-    "publicKey": "BIDiVIeBDfQJ-ei7iFOu1WJAA1l-YcFvBXRQQa-B-sMWMig9-qoFs14cYNTXew5fN_2efPbbNPIVIsUTnPN4pzs",
-    "privateKey": "7aWWZsodXTB8mddZNCmHXMnqoH-zxqmtr6JVIGf8Sc4"
-};
-// webpush.setVapiDetails(
-//     'mailto:example@yourdoimain.org',
-//     vapiKeys.publicKey,
-//     vapiKeys.privateKey
-// );
-compraRoutes.post('/pushweb', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pushSubscription = {
-        endpoint: 'https://fcm.googleapis.com/fcm/send/fzXK7np3dPw:APA91bFuA4QRkK4KPY_OBPr66XDeJ9bi44kC16Q6CJRYKp_v_GhJ4Nmiirzxa7cPX7GwRiQstzwaryT29Z1k5tm79zlrACBj9H58l6fT6B-hHkF-IxVPPYJniAvWvUH4H3q3gzn68Yn_',
-        keys: {
-            auth: 'IipD6jHeubrEQhc6c-M-Fw',
-            p256dh: 'BHdbTYCma41_YX0UBp6de8xeOBcXs5gLbNOUI14vDSs86UGiQ4cMgyeQsnibhvXXmOadlZ-EzCESchjme_wIq-U'
-        }
-    };
-    const payload = {
-        "notification": {
-            "title": "Titulo prueba",
-            "body": "Descripcion de la notificaion de compra.",
-            "vibrate": [100, 50, 100],
-            "image": "https://admin.amazonastrading.com.pe/resources/images/notifications.png",
-            "data": {
-                "dateOfArrival": Date.now(),
-                "primaryKey": 1,
-            },
-            "actions": [{
-                    "action": "explore",
-                    "title": "Go to the site",
-                }]
-        }
-    };
-    webpush.sendNotification(pushSubscription, JSON.stringify(payload)).then(() => {
-        res.status(200).json({ msg: 'Notifications sent!' });
-    });
-}));
 //Obtener compra Paginados
 compraRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let pagina = Number(req.query.pagina) || 1;
@@ -63,12 +26,11 @@ compraRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* 
         .populate('socio')
         .exec();
     res.json({
-        // ok: true,
+        ok: true,
         pagina,
         compras
     });
 }));
-//
 //Obtener Compras Paginados
 compraRoutes.get('/listar', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let pagina = Number(req.query.pagina) || 1;
@@ -93,7 +55,6 @@ compraRoutes.get('/10', (req, res) => __awaiter(void 0, void 0, void 0, function
     const [compras, total] = yield Promise.all([
         compra_model_1.Compra.find({})
             .sort({ _id: -1 })
-            // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
             .limit(80),
         compra_model_1.Compra.countDocuments()
@@ -108,7 +69,6 @@ compraRoutes.get('/10', (req, res) => __awaiter(void 0, void 0, void 0, function
 //Obetner Servicios x2
 compraRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [compra, total] = yield Promise.all([
         compra_model_1.Compra.find()
             .sort({ _id: -1 })
@@ -147,15 +107,6 @@ compraRoutes.post('/update/:id', (req, res) => {
     const compra = {
         estado: req.body.estado,
         calificacion: req.body.calificacion,
-        // completado: req.body.completado,
-        // observacion: req.body.observacion,
-        // grano: req.body.grano,
-        // sede: req.body.sede,
-        // tecnico: req.body.tecnico,
-        // comentario: req.body.comentario || req.servicios.comentario,
-        // precio: req.body.precio,
-        // start: req.body.start,
-        // cantidad: req.body.cantidad,
     };
     compra_model_1.Compra.findByIdAndUpdate(id, compra, { new: true }, (err, compra) => {
         if (err)

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const notificacionRouter = express_1.Router();
 const notificaciones_model_1 = require("../models/notificaciones.model");
-// Crear un sipo de solicitud en la seccion NOTICIAS
+// Crear
 notificacionRouter.post('/crear', (req, res) => {
     const notificacion = {
         titulo: req.body.titulo,
@@ -38,11 +38,9 @@ notificacionRouter.post('/crear', (req, res) => {
 //Obetner Servicios x2
 notificacionRouter.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [notificacion, total] = yield Promise.all([
         notificaciones_model_1.Notificacion.find()
             .sort({ _id: -1 })
-            // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
             .limit(10),
         notificaciones_model_1.Notificacion.countDocuments()
@@ -67,5 +65,4 @@ notificacionRouter.delete('/:id', (req, res) => {
         });
     });
 });
-// ss
 module.exports = notificacionRouter;

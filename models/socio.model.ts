@@ -1,7 +1,6 @@
 import {Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-
 const socioSchema = new Schema({
 
     nombre: {
@@ -51,10 +50,7 @@ const socioSchema = new Schema({
         type: String,
         item: null
     }
-
-
 });
-
 
 
 socioSchema.method('compararPassword', function( password: string = ''): boolean {

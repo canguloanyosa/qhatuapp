@@ -1,13 +1,10 @@
 import {Schema, model, Document } from 'mongoose';
 
-
-
 const recuperarSchema = new Schema({
 
     created: {
         type: Date
     },
-
     email: {
         type: String,
         required: [ true, 'El documento de identidad es necesario']
@@ -30,8 +27,6 @@ const recuperarSchema = new Schema({
         type: String,
         default: '0'
     }
-
-
 });
 
 
@@ -48,9 +43,6 @@ interface IRecuperar extends Document {
     nombre: string;
     mensaje: string;
     estado: string;
-
 }
-
-
 
 export const Recuperar = model<IRecuperar>('Recuperar', recuperarSchema);

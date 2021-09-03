@@ -12,12 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const compra_model_1 = require("../models/compra.model");
 const socio_model_1 = require("../models/socio.model");
-const { validarJWT } = require('../middlewares/validar-jwt');
 const busquedaCompraRouter = express_1.Router();
 busquedaCompraRouter.get('/coleccion/:tabla/:busquedacompra', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tabla = req.params.tabla;
     const busqueda = req.params.busqueda;
-    // const regex = new RegExp( busqueda, 'i');
     const regex = new RegExp(busqueda);
     let data = [];
     switch (tabla) {

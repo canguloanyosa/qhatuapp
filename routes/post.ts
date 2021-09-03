@@ -2,19 +2,13 @@ import { Router, Response, response } from "express";
 import { verificaToken } from "../middlewares/autenticacion";
 import { Post } from "../models/post.model";
 
-
-
 const postRoutes = Router();
-
-
 
 //Obtener POST Paginados
 postRoutes.get('/',  async (req: any, res: Response)=> {
-
     let pagina = Number(req.query.pagina)  || 1;
     let skip =   pagina - 1;
     skip = skip * 10;
-
     const posts = await Post.find()
                             .sort({_id: -1})
                             .skip( skip)
@@ -22,16 +16,12 @@ postRoutes.get('/',  async (req: any, res: Response)=> {
                             .populate('usuario','-password')
                             .exec();
 
-
     res.json({
         ok: true,
         pagina,
         posts
     });
 });
-
-
-
 
 
 //Crear POST
@@ -51,7 +41,7 @@ postRoutes.post('/', [verificaToken], (req: any, res: Response)=> {
 
 
 
-// Agregar comentario
+// Agregar respuestas
 postRoutes.post('/update/:id', (req: any, res: Response) => {
     const id=req.params.id;
     const post = {
@@ -71,9 +61,6 @@ postRoutes.post('/update/:id', (req: any, res: Response) => {
         });post
     })
 });
-
-
-
 
 
 export default postRoutes;

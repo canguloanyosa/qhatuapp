@@ -1,12 +1,9 @@
 import { Router, Response, Request, response } from 'express';
-import { check, validationResult } from 'express-validator';
 const notificacionRouter = Router();
 import { Notificacion } from '../models/notificaciones.model';
 
 
-
-
-// Crear un sipo de solicitud en la seccion NOTICIAS
+// Crear
 notificacionRouter.post('/crear', (req: Request, res: Response) => {
     const notificacion = {
         titulo: req.body.titulo,
@@ -16,16 +13,12 @@ notificacionRouter.post('/crear', (req: Request, res: Response) => {
         userId: req.body.userId,
         pushId: req.body.pushId,
         tipo: req.body.tipo,
-
     }
-
     Notificacion.create( notificacion).then( notificacionDB => {
         res.json({
             ok: true,
             notificacion: notificacionDB
         });
-
-
     }).catch(err => {
         res.json({
             ok: false,
@@ -34,22 +27,12 @@ notificacionRouter.post('/crear', (req: Request, res: Response) => {
     })
 });
 
-
-
-
-
-
 //Obetner Servicios x2
 notificacionRouter.get('/obtener', async (req: any, res: any) => {
     const desde =  Number(req.query.desde) || 0;
-    // console.log(desde);
-
-
-
     const [ notificacion, total] =  await Promise.all([
                                     Notificacion.find()
                                     .sort({_id: -1})          
-                                    // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
                                     .limit( 10 ),
                                     Notificacion.countDocuments()
@@ -62,14 +45,11 @@ notificacionRouter.get('/obtener', async (req: any, res: any) => {
     });
 });
 
-
 // Borrar Notificacion 
 notificacionRouter.delete('/:id',    (req: any, res: Response) => {
     const id = req.params.id;
-
     Notificacion.findByIdAndRemove(id, (err, notificacion ) => {
         if(err) throw err;
-
         res.json({
             ok: true,
             mensaje: 'Notificacion Eliminada',
@@ -77,7 +57,5 @@ notificacionRouter.delete('/:id',    (req: any, res: Response) => {
         })
     }); 
 });
-// ss
-
 
 module.exports =  notificacionRouter;

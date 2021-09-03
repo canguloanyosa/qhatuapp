@@ -50,19 +50,12 @@ const servicio2Schema = new Schema ({
         ref: 'Usuario',
         required: [true, 'Debe existir una referencia a un usuario']
     }
-
-
-
 });
-
-
 
 servicio2Schema.pre<IServicio2>('save', function( next ) {
     this.created = new Date();
     next();
 });
-
-
 
 interface IServicio2 extends Document {
     created: Date;
@@ -76,9 +69,6 @@ interface IServicio2 extends Document {
     start: string;
     usuario: string;
     id_push: string;
-
-    //laime
-    
 }
 
 export const Servicio2 = model<IServicio2>('Servicio2', servicio2Schema);

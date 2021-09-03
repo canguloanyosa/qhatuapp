@@ -1,11 +1,9 @@
 import { Schema, Document, model} from 'mongoose';
 
 const servicioSchema = new Schema ({
- 
     created: {
         type: Date
     },
- 
     tipo: {
         type: String
     },
@@ -18,16 +16,12 @@ const servicioSchema = new Schema ({
     grano: {
         type: String
     },
-    
     cantidad: {
         type: String
     },
-    
     precio: {
         type: String
     },
-    
-    
     tecnico: {
         type: String
     },
@@ -40,8 +34,7 @@ const servicioSchema = new Schema ({
     proceso: {
         type: String,
         default: ''
-    }
-    ,
+    },
     completado: {
         type: String,
         default: ''
@@ -56,25 +49,18 @@ const servicioSchema = new Schema ({
     },
     id_push: {
         type: String,
-    }
-
-    ,
+    },
     usuario: {
         type: Schema.Types.ObjectId,
         ref: 'Usuario',
         required: [true, 'Debe existir una referencia a un usuario']
     }
-
-
 });
-
-
 
 servicioSchema.pre<IServicio>('save', function( next ) {
     this.created = new Date();
     next();
 });
-
 
 interface IServicio extends Document {
     created: Date,

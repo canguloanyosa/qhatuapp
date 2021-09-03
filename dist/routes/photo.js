@@ -11,8 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const photo_model_1 = require("../models/photo.model");
 const express_1 = require("express");
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const cloudinary = require('cloudinary').v2;
 cloudinary.config({
     cloud_name: 'amazonastrading',
@@ -25,24 +23,19 @@ photoRoutes.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* 
     const { tempFilePath } = req.files.imagePath;
     const resp = yield cloudinary.uploader.upload(tempFilePath, { folder: "qhatu" });
     const pathUrl = resp.secure_url;
-    const { title, description } = req.body;
     const photo = {
-        // title: title,
-        // description: description,
         imagePath: pathUrl
     };
     const photos = new photo_model_1.Photo(photo);
     yield photos.save();
     return res.json({
-        // ok: true,
+        ok: true,
         msg: 'Publicado',
         photo
     });
 }));
 photoRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // let skip =   pagina - 1;
-    // skip = skip * 10;
     const [photo, total] = yield Promise.all([
         photo_model_1.Photo.find()
             .sort({ _id: -1 })

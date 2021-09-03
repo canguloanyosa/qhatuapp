@@ -41,7 +41,6 @@ busquedaRouter.get('/:busqueda', validarJWT, (req, res) => __awaiter(void 0, voi
 busquedaRouter.get('/coleccion/:tabla/:busqueda', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tabla = req.params.tabla;
     const busqueda = req.params.busqueda;
-    // const regex = new RegExp( busqueda, 'i');
     const regex = new RegExp(busqueda);
     let data = [];
     switch (tabla) {

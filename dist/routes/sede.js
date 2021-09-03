@@ -13,7 +13,6 @@ const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const sedeRouter = express_1.Router();
 const sede_model_1 = require("../models/sede.model");
-const { generarJWT } = require('../helpers/jwt');
 const { validarJWT } = require('../middlewares/validar-jwt');
 //Obetner Sedes
 sedeRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,14 +23,12 @@ sedeRouter.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         sede
     });
 }));
-//Obetner Servicios x2
+//Obetner 
 sedeRouter.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [sede, total] = yield Promise.all([
         sede_model_1.Sede.find()
             .sort({ _id: -1 })
-            // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
             .limit(5),
         sede_model_1.Sede.countDocuments()
@@ -111,7 +108,6 @@ sedeRouter.post('/', [
         });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({
             ok: false,
             msg: 'Hable con el administrador'

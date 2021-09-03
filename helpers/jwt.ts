@@ -1,15 +1,9 @@
-
 const jwt = require('jsonwebtoken');
-
-
 const generarJWT = (id: any) => {
-
     return new Promise( (resolve, reject)=> {
-
         const payload = {
             id
         };
-        
         jwt.sign(payload, 'codigo-token-fake',
             {expiresIn: '9h'},
             (err: any, token: any) => {
@@ -22,13 +16,7 @@ const generarJWT = (id: any) => {
             }
     
             });
-
     });
-    
-    
 }
 
-
-
-
-module.exports = { generarJWT,  }
+module.exports = { generarJWT }

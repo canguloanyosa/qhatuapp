@@ -29,7 +29,6 @@ versionRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
     let pagina = Number(req.query.pagina) || 1;
     let skip = pagina - 1;
     skip = skip * 1;
-    //laime
     const version = yield version_model_1.Version.find()
         .sort({ _id: -1 })
         .skip(skip)
@@ -44,7 +43,6 @@ versionRoutes.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function*
 //Obetner Servicios x2
 versionRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [version, total] = yield Promise.all([
         version_model_1.Version.find()
             .sort({ _id: -1 })

@@ -12,7 +12,6 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Admin = void 0;
-// const { Schema, model } = require('mongoose');
 const mongoose_1 = require("mongoose");
 const AdminSchema = new mongoose_1.Schema({
     nombre: {
@@ -30,7 +29,6 @@ const AdminSchema = new mongoose_1.Schema({
     },
     password_show: {
         type: String,
-        // item: null
     },
     img: {
         type: String,

@@ -35,11 +35,9 @@ recuperarRoutes.post('/', (req, res) => {
 //Obetner Servicios x2
 recuperarRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
-    // console.log(desde);
     const [recuperar, total] = yield Promise.all([
         recuperar_model_1.Recuperar.find()
             .sort({ _id: -1 })
-            // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
             .limit(5),
         recuperar_model_1.Recuperar.countDocuments()
@@ -64,7 +62,7 @@ recuperarRoutes.delete('/:id', (req, res) => {
         });
     });
 });
-//Actualizar Servicio Asistencia Tecnica
+//Actualizar 
 recuperarRoutes.post('/update/:id', (req, res) => {
     const id = req.params.id;
     const recuperar = {
