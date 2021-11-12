@@ -70,7 +70,7 @@ precioRoutes.get('/30', (req, res) => __awaiter(void 0, void 0, void 0, function
             .sort({ _id: -1 })
             // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
-            .limit(100),
+            .limit(70),
         precios_model_1.Precio.countDocuments()
     ]);
     res.json({
@@ -89,7 +89,7 @@ precioRoutes.get('/10', (req, res) => __awaiter(void 0, void 0, void 0, function
             .sort({ _id: -1 })
             // .populate('usuario', 'nombre celular email dni avatar')
             .skip(desde)
-            .limit(100),
+            .limit(70),
         precios_model_1.Precio.countDocuments()
     ]);
     res.json({

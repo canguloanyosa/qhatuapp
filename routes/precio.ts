@@ -69,7 +69,7 @@ precioRoutes.get('/30', async (req: any, res: any) => {
                                     .sort({_id: -1})          
                                     // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
-                                    .limit( 100 ),
+                                    .limit( 70 ),
                                     Precio.countDocuments()
     ]);
     res.json({
@@ -91,7 +91,7 @@ precioRoutes.get('/10', async (req: any, res: any) => {
                                     .sort({_id: -1})          
                                     // .populate('usuario', 'nombre celular email dni avatar')
                                     .skip( desde )
-                                    .limit( 100 ),
+                                    .limit( 70 ),
                                     Precio.countDocuments()
     ]);
     res.json({
