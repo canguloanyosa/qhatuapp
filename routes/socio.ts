@@ -353,11 +353,18 @@ socioRoutes.get('/', [ verificaTokenSocio ], ( req: any, res: Response ) => {
 });
 
 
-socioRoutes.get('/', [verificaTokenSocio], (req: any, res: Response) => {
-    const socio = req.socio;
+
+
+socioRoutes.get('/todo', async  (req: any, res: Response) => {
+    const [ socio, total] =  await Promise.all([
+        Socio.find()
+        .sort({_id: -1}) ,
+        Socio.countDocuments()         
+]);
     res.json({
         ok: true,
-        socio
+        total,
+        socio, 
     });
 });
 

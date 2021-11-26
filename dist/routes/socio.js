@@ -320,13 +320,18 @@ socioRoutes.get('/', [autenticationSocio_1.verificaTokenSocio], (req, res) => {
         socio
     });
 });
-socioRoutes.get('/', [autenticationSocio_1.verificaTokenSocio], (req, res) => {
-    const socio = req.socio;
+socioRoutes.get('/todo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const [socio, total] = yield Promise.all([
+        socio_model_1.Socio.find()
+            .sort({ _id: -1 }),
+        socio_model_1.Socio.countDocuments()
+    ]);
     res.json({
         ok: true,
-        socio
+        total,
+        socio,
     });
-});
+}));
 //Obetner Socio x2
 socioRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;

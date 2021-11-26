@@ -507,7 +507,7 @@ userRoutes.delete('/:id',    (req: any, res: Response) => {
 //Obetner Usuarios TODOS
 userRoutes.get('/exportar', async (req: any, res: any) => {
     const [ usuario, total] =  await Promise.all([
-                                    Usuario.find({}, ' -_id nombre email celular dni password password_show ubicacion departamento provincia region push farmerid avatar')
+                                    Usuario.find({}, ' -_id nombre email celular dni password_show sede farmerid')
                                     .sort({_id: -1})    
     ]);
     res.json({

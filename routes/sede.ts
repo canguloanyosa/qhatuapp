@@ -1,4 +1,5 @@
-import { Router, response } from 'express';
+import { Router, Response, response ,Request } from "express";
+
 import { check } from 'express-validator';
 const sedeRouter = Router();
 import { Sede } from "../models/sede.model";
@@ -58,6 +59,31 @@ sedeRouter.delete('/:id', async (req: any, res: any) => {
             msg: 'Hable con el administrador'
         })
     }
+});
+
+
+//Actualizar Sedes Recojo de Cacao
+sedeRouter.post('/update/:id', (req: any, res: Response) => {
+    const id=req.params.id;
+    const sedes = {
+        nombre: req.body.nombre,
+        direccion: req.body.direccion,
+        telefono: req.body.telefono,
+        mapa: req.body.mapa,
+    }
+    Sede.findByIdAndUpdate(id, sedes, {new: true}, (err, sedes) => {
+        if(err) throw err;
+        if(!sedes){
+            return res.json({
+                ok:false,
+                mensaje: 'Invalid data'
+            })
+        }
+        res.json({
+            ok: true,
+            sedes
+        });
+    })
 });
 
 

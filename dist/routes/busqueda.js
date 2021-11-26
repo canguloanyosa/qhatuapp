@@ -41,7 +41,8 @@ busquedaRouter.get('/:busqueda', validarJWT, (req, res) => __awaiter(void 0, voi
 busquedaRouter.get('/coleccion/:tabla/:busqueda', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tabla = req.params.tabla;
     const busqueda = req.params.busqueda;
-    const regex = new RegExp(busqueda);
+    const regex = new RegExp("^" + busqueda.toLowerCase(), "i");
+    // new RegExp('^'+ username + '$', "i")
     let data = [];
     switch (tabla) {
         case 'tecnico':
@@ -59,6 +60,10 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda', (req, res) => __awaiter(void 0
             break;
         case 'usuario':
             data = yield usuario_model_1.Usuario.find({ nombre: regex })
+                .populate('usuario', 'nombre dni email celular');
+            break;
+        case 'usuariosede':
+            data = yield usuario_model_1.Usuario.find({ sede: regex })
                 .populate('usuario', 'nombre dni email celular');
             break;
         case 'dni':
@@ -79,6 +84,10 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda', (req, res) => __awaiter(void 0
             break;
         case 'compra':
             data = yield compra_model_1.Compra.find({ sede: regex })
+                .populate('socio', 'nombre dni email celular');
+            break;
+        case 'compraEncargado':
+            data = yield compra_model_1.Compra.find({ socio: regex })
                 .populate('socio', 'nombre dni email celular');
             break;
         case 'servicio':

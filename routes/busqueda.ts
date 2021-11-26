@@ -38,7 +38,9 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
 
     const tabla = req.params.tabla;
     const busqueda = req.params.busqueda;
-    const regex = new RegExp( busqueda);
+    const regex = new RegExp("^" + busqueda.toLowerCase(), "i");
+
+    // new RegExp('^'+ username + '$', "i")
 
     let data = [];
 
@@ -66,6 +68,11 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
                                                         .populate('usuario', 'nombre dni email celular');
         break;
 
+        case 'usuariosede':
+            data = await Usuario.find({ sede: regex })
+                                                        .populate('usuario', 'nombre dni email celular');
+
+        break;
 
         case 'dni':
             data = await Usuario.find({ dni:regex })
@@ -94,7 +101,12 @@ busquedaRouter.get('/coleccion/:tabla/:busqueda',  async (req: any, res: any) =>
         case 'compra':
             data = await Compra.find({ sede:regex })
                                                         .populate('socio', 'nombre dni email celular');              
-                                        
+        break;
+
+
+        case 'compraEncargado':
+            data = await Compra.find({ socio: regex })
+                                                        .populate('socio', 'nombre dni email celular');              
         break;
 
 

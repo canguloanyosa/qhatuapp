@@ -64,6 +64,30 @@ sedeRouter.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
 }));
+//Actualizar Sedes Recojo de Cacao
+sedeRouter.post('/update/:id', (req, res) => {
+    const id = req.params.id;
+    const sedes = {
+        nombre: req.body.nombre,
+        direccion: req.body.direccion,
+        telefono: req.body.telefono,
+        mapa: req.body.mapa,
+    };
+    sede_model_1.Sede.findByIdAndUpdate(id, sedes, { new: true }, (err, sedes) => {
+        if (err)
+            throw err;
+        if (!sedes) {
+            return res.json({
+                ok: false,
+                mensaje: 'Invalid data'
+            });
+        }
+        res.json({
+            ok: true,
+            sedes
+        });
+    });
+});
 //Actualizar Sedes
 sedeRouter.put('/:id', [
     validarJWT,

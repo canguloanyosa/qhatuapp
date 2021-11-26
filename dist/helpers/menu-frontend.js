@@ -31,6 +31,7 @@ const getMenuFrontEnd = (role = '0') => {
         menu[1].submenu.unshift({ titulo: 'Usuarios QHATU COMPRA APP', url: 'tecnicosapp' });
         menu[1].submenu.unshift({ titulo: 'Usuarios APP', url: 'usuariosapp' });
         menu[1].submenu.unshift({ titulo: 'Compras APP', url: 'ventas' });
+        menu[1].submenu.unshift({ titulo: 'Reportes APP', url: 'reportes' });
     }
     // ROLE 2 = ADMIN
     if (role === '1') {

@@ -48,6 +48,105 @@ compraRoutes.get('/listar', (req, res) => __awaiter(void 0, void 0, void 0, func
         compras
     });
 }));
+// compraRoutes.get('/filtrar',(req: any, res: any) => {
+//     Compra.find({ "created":{
+//         "$gte": new Date("2021-04-24"), 
+//         "$lt": new Date("2021-04-29")
+//     }},
+//     function (err, result) {
+//     if (err){
+//         res.status(400).send({data: { message: err }});
+//         return;
+//     }
+//     else if(result)
+//     {
+//         res.status(200).send({data: { message: result }});
+//     }
+//     })
+// })
+//OBTENER COMPRAS EN UN RANGO DE FECHA
+compraRoutes.post('/filtro', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    compra_model_1.Compra.find({ "created": {
+            "$gte": new Date(req.body.startDate),
+            "$lt": new Date(req.body.endDate)
+        } }, function (err, result) {
+        if (err) {
+            res.status(400).send({ data: { message: err } });
+            return;
+        }
+        else if (result) {
+            res.status(200).send({ data: { message: result } });
+        }
+    });
+}));
+compraRoutes.post('/filtrofecha', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const [compra, total] = yield Promise.all([
+        compra_model_1.Compra.find({ "created": {
+                "$gte": new Date(req.body.startDate),
+                "$lt": new Date(req.body.endDate)
+            } }, '_foto  dni nombre email celular precio cantidad  total sede')
+            .sort({ _id: -1 })
+            .populate('socio'),
+    ]);
+    res.json({
+        ok: true,
+        total,
+        compra,
+    });
+}));
+compraRoutes.post('/filtro_socio', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const socio = req.body.socio;
+    const [compra, total] = yield Promise.all([
+        compra_model_1.Compra.find({ "socio": {
+                "_id": socio,
+            } }, '_foto  dni nombre email celular precio cantidad  total sede ')
+            .sort({ _id: -1 })
+            .populate('socio'),
+        compra_model_1.Compra.countDocuments({ "socio": {
+                "_id": socio,
+            } })
+    ]);
+    res.json({
+        ok: true,
+        total,
+        compra,
+    });
+}));
+compraRoutes.post('/filtroid', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const socio = req.body.socio;
+    const desde = Number(req.query.desde) || 0;
+    const [compra, total] = yield Promise.all([
+        compra_model_1.Compra.find({ "socio": {
+                "_id": socio,
+            } })
+            .sort({ _id: -1 })
+            .skip(desde)
+            .limit(5)
+            .populate('socio'),
+        compra_model_1.Compra.countDocuments({ "socio": {
+                "_id": socio,
+            } })
+    ]);
+    res.json({
+        ok: true,
+        total,
+        compra,
+    });
+    // Compra.find({}, ' -_id  dni nombre celular precio cantidad total sede created')
+    // Compra.find({ "socio":{
+    //     "_id": socio, 
+    // }},
+    // function (err, result) {
+    // if (err){
+    //     res.status(400).send({data: { message: err }});
+    //     return;
+    // }
+    // else if(result)
+    // {
+    //     res.status(200).send({data: { message: result }});
+    // }
+    // })
+}));
 //Obetner 10 precios
 compraRoutes.get('/10', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const desde = Number(req.query.desde) || 0;
