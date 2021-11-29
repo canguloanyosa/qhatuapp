@@ -226,6 +226,24 @@ compraRoutes.get('/obtener', async (req: any, res: any) => {
 });
 
 
+//Obetner todas las compras 
+compraRoutes.get('/obtenertodo', async (req: any, res: any) => {
+    const [ compra, total] =  await Promise.all([
+                                    Compra.find()
+                                    .sort({_id: -1})          
+                                    .populate('socio', 'nombre celular email dni avatar'),
+                                    Compra.countDocuments()
+    ]);
+    res.json({
+        ok: true,
+        compra,
+        total,
+        id: req.id 
+    });
+});
+
+
+
 // Crear una  solicitud en la seccion SERVICIOS
 compraRoutes.post('/',  [verificaTokenSocio] , (req: any, res: Response) => {
     const body = req.body

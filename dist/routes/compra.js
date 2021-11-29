@@ -183,6 +183,21 @@ compraRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, fun
         id: req.id
     });
 }));
+//Obetner todas las compras 
+compraRoutes.get('/obtenertodo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const [compra, total] = yield Promise.all([
+        compra_model_1.Compra.find()
+            .sort({ _id: -1 })
+            .populate('socio', 'nombre celular email dni avatar'),
+        compra_model_1.Compra.countDocuments()
+    ]);
+    res.json({
+        ok: true,
+        compra,
+        total,
+        id: req.id
+    });
+}));
 // Crear una  solicitud en la seccion SERVICIOS
 compraRoutes.post('/', [autenticationSocio_1.verificaTokenSocio], (req, res) => {
     const body = req.body;

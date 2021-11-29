@@ -437,6 +437,22 @@ userRoutes.get('/obtener', (req, res) => __awaiter(void 0, void 0, void 0, funct
         id: req.id
     });
 }));
+userRoutes.post('/filtro_sede', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const sede = req.body.sede;
+    const desde = Number(req.query.desde) || 0;
+    const [usuario, total] = yield Promise.all([
+        usuario_model_1.Usuario.find({ "sede": sede }, '-photo -password')
+            .sort({ _id: -1 })
+            .skip(desde),
+        usuario_model_1.Usuario.countDocuments({ "sede": sede })
+    ]);
+    res.json({
+        ok: true,
+        total,
+        sede,
+        usuario,
+    });
+}));
 //Borrar 
 userRoutes.delete('/:id', (req, res) => {
     const id = req.params.id;

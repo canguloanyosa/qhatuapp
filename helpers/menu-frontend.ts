@@ -38,11 +38,14 @@ export const getMenuFrontEnd = (role = '0') => {
 
       // ROLE 2 = ADMIN
       if( role === '1') { 
-        menu[1].submenu.unshift({ titulo: 'Usuarios APP', url: 'usuariosapp'})
+        menu[1].submenu.unshift({ titulo: 'Usuarios APP', url: 'usuariosapp-sede'})
         menu[1].submenu.unshift({ titulo: 'Precios APP', url: 'precios'})
         menu[1].submenu.unshift({ titulo: 'Compras Sede APP', url: 'ventas-sede'})
         menu[1].submenu.unshift({ titulo: 'Noticias APP', url: 'noticia'})
         menu[1].submenu.unshift({ titulo: 'Recojo de Cacao', url: 'recogo-sede'})
+
+
+        
       }
       return menu;
     }
